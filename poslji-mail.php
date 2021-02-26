@@ -49,7 +49,7 @@ $phpMailer->SMTPAuth = true;
 $phpMailer->SMTPSecure = "starttls";
 
 $phpMailer->Username = 'zts.it@taborniki.si';
-$phpMailer->Password = 'Fur49445'; 
+$phpMailer->Password = '********'; 
 
 $phpMailer->setFrom('zts.it@taborniki.si', 'ZTS IT ekipa');
 $phpMailer->addReplyTo('zts.it@taborniki.si', 'zts.it@taborniki.si');

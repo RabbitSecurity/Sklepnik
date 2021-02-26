@@ -1,6 +1,4 @@
 <?php
-//25+60+45+25+220+100+40+30+40
-
 include("config.php");
 
 //Pridobi informacije o dogodku

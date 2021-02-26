@@ -1,0 +1,165 @@
+body {
+	margin-left:20px;
+	margin-top:20px; 	
+}
+a {
+	color: #3b5998;
+	font-weight:bold;
+	margin-top: 10px;
+	text-decoration:none;
+}
+
+a img {
+	border:none;
+}
+
+a:hover {
+	border-bottom: none;
+}
+h1 {
+    margin-top:5px;
+	font-size: 25px;
+	margin-bottom:5px;
+	font-family: verdana;
+}
+
+h2 {
+	font-size: 15px;
+	margin-bottom:10px;
+	font-family: verdana;
+}
+
+h3 {
+	font-size: 12px;
+	margin-bottom:5px;
+	font-family: verdana;
+}
+
+big, strong {
+	font-size: 15px;
+}
+
+#content {
+	min-width: 450px;
+	max-width:900px;
+	line-height:1.3;
+	margin-top:25px;
+}
+
+#content-admin {
+	min-width: 450px;
+	line-height:1.3;
+	margin-top:25px;
+}
+
+#copyright {
+	margin-top: 100px;
+}
+input {
+	margin: 1px 0px;
+}
+
+.gumb-glasuj {
+	font-size:20px !important;
+	padding: 5px 20px 5px 20px;
+	cursor:pointer;
+}
+
+#glasovalnik {
+	min-height:200px;
+}
+
+#prisotni-delegati {
+	line-height:2em;
+}
+
+#prisotni-delegati div {
+	display:inline-block;
+	margin-bottom:5px;
+	border-radius:5px;
+	padding:5px 10px 5px 10px;
+	background-color:#eee;
+}
+
+#sklepcnost div {
+	display:inline-block;
+	margin-bottom:5px;
+	border-radius:5px;
+	padding:5px 25px 5px 25px;
+	background-color:#eee;
+	line-height:2em;
+	font-size:18px;
+}
+
+div{
+	font-family: verdana;
+	font-size: 12px;
+}
+
+.inputCenter {
+	text-align:center;
+}
+
+sup {
+	font-size:8px;
+}
+
+.info {
+    color:silver;
+    margin-top:10px;
+}
+
+small {
+    color:#888888;
+    margin-top:10px;
+	font-family: verdana;
+}
+
+table {
+	border-collapse: collapse;
+	
+}
+
+tr, th, td {
+	border: 1px solid #eee;
+}
+
+table, tr, td, th {
+	padding:4px 10px 4px 10px;
+}
+
+th {
+	font-weight:bold;
+	text-align:left;
+}
+
+tfoot tr, tfoot td {
+	font-weight:bold;
+	border:none;
+	border-bottom:0;
+}
+
+.button-td {
+	cursor:pointer;
+}
+
+.header {
+	font-weight:bold;
+	background-color:#91a6d4;
+}
+
+/* div s poimensko tabelo */
+.poimenski-seznam {
+	margin-top:20px;
+	display:none;
+}
+
+#disclamer {
+	line-height:1.5;
+	width:500px;
+}
+
+#footer {
+	margin-top:40px;
+	padding:0;
+}

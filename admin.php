@@ -12,7 +12,7 @@ include("login.php");
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Sklepnik - Admin za <?php echo($dogodek_row->ime); ?></title>
 
-    <link rel='stylesheet' href='style.css?<?php echo filemtime("style.css"); ?>'/>
+    <link rel='stylesheet' href='admin.css?<?php echo filemtime("admin.css"); ?>'/>
 
     <script type="text/javascript" src="js/funkcije.js"></script>
     <script type="text/javascript" src="js/admin.js"></script>

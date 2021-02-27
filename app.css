@@ -1,0 +1,81 @@
+.is-primary {
+	color: #007cba;
+}
+.has-background-primary {
+	background-color: #007cba !important;
+}
+
+.navbar.is-primary .navbar-end .navbar-link.is-active,
+.navbar.is-primary .navbar-end .navbar-link:focus,
+.navbar.is-primary .navbar-end .navbar-link:hover,
+.navbar.is-primary .navbar-end>a.navbar-item.is-active,
+.navbar.is-primary .navbar-end>a.navbar-item:focus,
+.navbar.is-primary .navbar-end>a.navbar-item:hover,
+.navbar.is-primary .navbar-start .navbar-link.is-active,
+.navbar.is-primary .navbar-start .navbar-link:focus,
+.navbar.is-primary .navbar-start .navbar-link:hover,
+.navbar.is-primary .navbar-start>a.navbar-item.is-active,
+.navbar.is-primary .navbar-start>a.navbar-item:focus,
+.navbar.is-primary .navbar-start>a.navbar-item:hover,
+.navbar.is-primary .navbar-brand>a.navbar-item:hover,
+.navbar.is-primary .navbar-brand>a.navbar-item:focus {
+	background-color: #006ba1;
+}
+.navbar.is-primary .navbar-end>a.navbar-item:hover,
+.navbar.is-primary .navbar-end>a.navbar-item:focus {
+	background: none;
+}
+#odgovori {
+	text-align: center;
+}
+
+#odgovori .button {
+	width: 150px;
+	margin: 0 1em 0 0;
+}
+
+#odgovori .selected {
+	font-weight: 700;
+}
+#odgovori .unselected {
+	opacity: 0.5;
+}
+
+#prisotni-delegati div {
+	display: inline-block;
+	margin: 0.125em 0.25em;
+	padding: 0.25em 0.75em;
+	border-radius: 5px;
+	color: white;
+}
+
+#prisotni-delegati div.has-background-success:before {
+	font-family: "Font Awesome 5 Free";
+	font-weight: 900;
+	content: "\f058";
+	margin-right: 0.5em;
+}
+#prisotni-delegati div.has-background-danger:before {
+	font-family: "Font Awesome 5 Free";
+	font-weight: 900;
+	content: "\f057";
+	margin-right: 0.5em;
+}
+#prisotni-delegati div.has-background-info:before {
+	font-family: "Font Awesome 5 Free";
+	font-weight: 900;
+	content: "\f056";
+	margin-right: 0.5em;
+}
+#trenuten-potek table {
+	width: 100%;
+	min-width: 512px;
+	table-layout: fixed;
+}
+
+@media screen and (max-width: 768px) {
+	#odgovori .button {
+		width: 100%;
+		margin: 0.5em 0;
+	}
+}

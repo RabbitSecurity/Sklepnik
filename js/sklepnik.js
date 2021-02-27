@@ -1,7 +1,7 @@
 
 
 //Nastavljivi parametri
-var barve_glasu = ["#80ff80", "#ff9f80", "#ffd480"]; //barve ZA, PROTI in VZDRŽAN
+var barve_glas = ['success', 'danger', 'info'];
 var ping_interval = 3000; //interval pinganja za nove sklepe/update rezultatov
 
 
@@ -32,25 +32,20 @@ function pinger() {
 	if(first_ping) {
 		//prikaži aktivnost povezave (10s)
 		if(new Date().getTime() - last_response < 10000) {
-			var date = new Date();
-			
-			var h = date.getHours();
-			if(h<10) h = "0"+h;
-			
-			var m = date.getMinutes();
-			if(m<10) m = "0"+m;
-			
-			var s = date.getSeconds();
-			if(s<10) s = "0"+s;
-			
-			$('status').innerHTML = "<font color='green'>Povezava s sistemom je aktivna <!--("+h+" : "+m+" : "+s+")-->.</font>";
+			$('conn-status-error').classList.add('is-hidden');
+			$('conn-status-ok').classList.remove('is-hidden');
+			$('conn-status-wait').classList.add('is-hidden');
 		}
 		else {
-			$('status').innerHTML = "<font color='red'>Povezava ne deluje!</font>";
+			$('conn-status-error').classList.remove('is-hidden');
+			$('conn-status-ok').classList.add('is-hidden');
+			$('conn-status-wait').classList.add('is-hidden');
 		}
 	}
 	else {
-		$('status').innerHTML = "<font color='orange'>Vzpostavljam povezavo...</font>";
+		$('conn-status-error').classList.add('is-hidden');
+		$('conn-status-ok').classList.add('is-hidden');
+		$('conn-status-wait').classList.remove('is-hidden');
 	}
 }
 window.onload = pinger;
@@ -84,9 +79,9 @@ function pingResponse(txt) {
 		var update_delegate = false;
 		
 		for(var i = 0; i < delegati.length; i++) {
-			barva = "#eee";
+			barva = "grey";
 			if(delegati[i][1] > 0) {
-				barva = barve_glasu[delegati[i][1] - 1];
+				barva = barve_glas[delegati[i][1] - 1];
 				glasovi[delegati[i][1] - 1]++;
 			}
 			
@@ -95,7 +90,7 @@ function pingResponse(txt) {
 			//delegat je v indeksu
 			if(typeof(delegati_index[delegat_id]) == "object") {
 				var delegat = delegati_index[delegat_id][0] + " (" + delegati_index[delegat_id][1] + ")";
-				html += "<div style='background-color:"+barva+";'>" + delegat + "</div> ";
+				html += `<div class="has-background-${barva}">${delegat}</div>`;
 				
 				//rod v obliki Ime (kratica)
 				var rod = delegati_index[delegat_id][2] + " (" + delegati_index[delegat_id][1] + ")";
@@ -121,14 +116,9 @@ function pingResponse(txt) {
 			
 			$('glasov').innerHTML = vsota;
 			
-			$('glasovi-za').innerHTML = glasovi[0];
-			$('glasovi-za').nextSibling.innerHTML = pct(glasovi[0]/vsota) + "%";
-			
-			$('glasovi-proti').innerHTML = glasovi[1];
-			$('glasovi-proti').nextSibling.innerHTML = pct(glasovi[1]/vsota) + "%";
-			
-			$('glasovi-vzdrzani').innerHTML = glasovi[2];
-			$('glasovi-vzdrzani').nextSibling.innerHTML = pct(glasovi[2]/vsota) + "%";
+			$('glasovi-za').innerHTML = `${glasovi[0]} (${pct(glasovi[0]/vsota)} %)`;
+			$('glasovi-proti').innerHTML = `${glasovi[1]} (${pct(glasovi[1]/vsota)} %)`;
+			$('glasovi-vzdrzani').innerHTML = `${glasovi[2]} (${pct(glasovi[2]/vsota)} %)`;
 			
 			$('udelezba').innerHTML = pct(vsota/delegati.length);
 			
@@ -176,14 +166,14 @@ function pingResponse(txt) {
 		
 		//Prikaži sklepčnost
 		if(delegati.length >= pogoji_sklepcnost[0] && rodovi.length >= pogoji_sklepcnost[1] && obmocja.length >= pogoji_sklepcnost[0]) {
-			//zeleno
-			$('sklepcnost-div').style.backgroundColor = barve_glasu[0];
-			$('sklepcnost-div').innerHTML = "Smo sklepčni";
+			$('quorum-status-error').classList.add('is-hidden');
+			$('quorum-status-ok').classList.remove('is-hidden');
+			$('quorum-status-wait').classList.add('is-hidden');
 		}
 		else {
-			//zeleno
-			$('sklepcnost-div').style.backgroundColor = barve_glasu[1];
-			$('sklepcnost-div').innerHTML = "Nismo sklepčni";
+			$('quorum-status-error').classList.remove('is-hidden');
+			$('quorum-status-ok').classList.add('is-hidden');
+			$('quorum-status-wait').classList.add('is-hidden');
 		}
 		
 		//Update seznama delegatov
@@ -217,14 +207,9 @@ function prikaziSklep(txt) {
 			zadnji_sklep = data[0];
 			
 			if(!passive_user) {
-				//skrij zahvalo
-				$('hvala').style.display = 'none';
 				
 				//ponastavi voting gumbe
 				glas_aktiven = false;
-				$('glas-1').style.backgroundColor = '';
-				$('glas-2').style.backgroundColor = '';
-				$('glas-3').style.backgroundColor = '';
 				
 		
 				$('odgovori').style.display = 'block';
@@ -242,26 +227,29 @@ function prikaziSklep(txt) {
 			
 			if(!passive_user) {
 				$('odgovori').style.display = 'none';
-				$('hvala').style.display = 'none';
 			}
 		}
 	}
 }
 
 function glasuj(glas) {
-	$('glas-' + glas).style.backgroundColor = barve_glasu[glas-1];
-	
-	//če gre za spremembo glasu
-	if(glas_aktiven) {
-		$('glas-' + zadnji_glas).style.backgroundColor = '';
-	}
+	$('glas-1').classList.remove('selected');
+	$('glas-2').classList.remove('selected');
+	$('glas-3').classList.remove('selected');
+
+	$('glas-1').classList.add('unselected');
+	$('glas-2').classList.add('unselected');
+	$('glas-3').classList.add('unselected');
+
+	$('glas-' + glas).classList.remove('unselected');
+	$('glas-' + glas).classList.add('selected');
 	
 	//pošlji glas oz. pravi token v bazo
 	ajax.post("glasuj.php", glasZabelezen, "v=" + vote_key + "&sklep=" + zadnji_sklep + "&token=" + vote_tokens[glas - 1]);
 	
 	glas_aktiven = true;
 	zadnji_glas = glas;
-	
+
 	//aktiviraj glasovalni timer (neaktivno)
 	//glas_timer = 10;
 	//if(!glas_aktiven) timer();
@@ -269,7 +257,6 @@ function glasuj(glas) {
 
 function glasZabelezen(txt) {
 	if(txt == "ok") {
-		$('hvala').style.display = 'block';
 	}
 	else {
 		alert("Napaka pri glasovanju!\n" + txt);

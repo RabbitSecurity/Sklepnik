@@ -27,7 +27,7 @@ if (mysql_num_rows($query) == 1) {
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Sklepnik - Pregled dogodka</title>
 
-    <link rel='stylesheet' href='style.css?<?php echo filemtime("style.css"); ?>'/>
+    <link rel='stylesheet' href='admin.css?<?php echo filemtime("admin.css"); ?>'/>
 
     <script type="text/javascript" src="js/funkcije.js"></script>
     <script type="text/javascript" src="js/sklepnik.js?<?php echo filemtime("sklepnik.js"); ?>"></script>

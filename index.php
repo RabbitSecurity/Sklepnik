@@ -1,24 +1,47 @@
 <?php
 include("config.php");
 
-//Prijava delegata
+//Prijava delegata oz. display dogodka
 $login_key = mysql_real_escape_string($_GET['u']);
 
-$query = mysql_query("select * from sklepnik_delegati where login_key = '$login_key' ");
+if(!empty($login_key)) {
+	$query = mysql_query("select * from sklepnik_delegati where login_key = '$login_key' ");
 
-if (mysql_num_rows($query) == 1) {
-    $user_row = mysql_fetch_object($query);
+	if (mysql_num_rows($query) == 1) {
+		$user_row = mysql_fetch_object($query);
 
-    $uporabnik = $user_row->ime . " " . $user_row->priimek . ", " . $user_row->rod . " (" . $user_row->obmocje_kratica . ")";
-} else {
-    die("Neveljavno vstopno geslo!");
+		$uporabnik = $user_row->ime . " " . $user_row->priimek . ", " . $user_row->rod . " (" . $user_row->obmocje_kratica . ")";
+	} else {
+		die("Neveljavno vstopno geslo!");
+	}
+
+	//Informacije o dogodku
+	$passive_user = false;
+	
+	$query = mysql_query("select * from sklepnik_dogodki where id = '$user_row->dogodek_id'");
+	$dogodek = mysql_fetch_object($query);
+	$dogodek_naslov = $dogodek->ime;
 }
-
-//Informacije o dogodku
-$query = mysql_query("select * from sklepnik_dogodki where id = '$user_row->dogodek_id'");
-$dogodek = mysql_fetch_object($query);
-$dogodek_naslov = $dogodek->ime;
-
+//Pasivni uporabnik ki samo spremlja?
+else {
+	$dogodek_key = mysql_real_escape_string($_GET['dogodek']);
+	
+	if(!empty($dogodek_key)) {
+		$query = mysql_query("select * from sklepnik_dogodki where access_key = '$dogodek_key' ");
+		
+		//Našli smo dogodek.
+		if (mysql_num_rows($query) == 1) {
+			$dogodek = mysql_fetch_object($query);
+			
+			$passive_user = true;
+		} else {
+			die("Neznan dogodek.");
+		}
+	}
+	else {
+		die("Neznan dogodek ali delegat.");
+	}
+}
 ?>
 
 <?php include_once("templates/header.php") ?>
@@ -109,9 +132,19 @@ $dogodek_naslov = $dogodek->ime;
 
 <script type="text/javascript">
     //glasovalni ključi uporabnika
-    var passive_user = false;
-    var login_key = "<?php echo $user_row->login_key; ?>";
-    var vote_key = "<?php echo $user_row->vote_key; ?>";
+	<?php
+	if(!$passive_user) {
+		echo("var passive_user = false;
+		var login_key = '".$user_row->login_key."';
+		var vote_key = '".$user_row->vote_key."';");
+	}
+	else {
+		echo("var passive_user = true;
+		var login_key = '!".$dogodek->access_key."';
+		var vote_key = '';");
+	}
+	?>
+    
 
     //pogoji za sklepčnost
     var pogoji_sklepcnost = [<?php echo("$dogodek->sklepcnost_min_delegatov,$dogodek->sklepcnost_min_rodov,$dogodek->sklepcnost_min_obmocji"); ?>];

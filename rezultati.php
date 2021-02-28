@@ -7,7 +7,7 @@ $time_start = microtime(true);
 //Pridobi informacije o dogodku
 $dogodek = mysql_real_escape_string($_GET['dogodek']);
 
-$query = mysql_query("select * from sklepnik_dogodki where md5(id) = '$dogodek' ");
+$query = mysql_query("select * from sklepnik_dogodki where access_key = '$dogodek' ");
 
 if(mysql_num_rows($query) == 1) {
 	$dogodek_row = mysql_fetch_object($query);

@@ -28,14 +28,23 @@
 
     <div id="navMenu" class="navbar-menu">
         <div class="navbar-start">
-            <span class="navbar-item">Delegat: <?php echo $uporabnik; ?></span>
+            <span class="navbar-item">
+			<?php
+			if(!$passive_user) {
+				echo("Delegat: $uporabnik");
+			}
+			else {
+				echo("$dogodek->ime v živo");
+			}
+			?>
+			</span>
         </div>
 
         <div class="navbar-end">
 
             <br/>
 
-            <a class="navbar-item" target="_blank" href="rezultati.php?dogodek=<?php $dogodek->access_key?>">Rezultati</a>
+            <a class="navbar-item" target="_blank" href="rezultati.php?dogodek=<?php echo($dogodek->access_key); ?>">Rezultati</a>
             <a class="navbar-item" target="_blank" href="https://www.google.com">Gradivo</a>
 
             <br/>

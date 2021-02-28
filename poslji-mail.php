@@ -75,7 +75,7 @@ $mail_html = "Pozdravljen_a $ime !<br/><br/>Pošiljamo ti povezavo do on-line gl
 <br/>
 <b>Povezave ne smeš deliti</b>, saj je unikatna in omogoča glasovanje v tvojem imenu.<br/>
 <br/>
-Vsi ostali lahko glasovanje v živo spremljajo <a href='https://bostjan.info/sklepnik/pregled.php?dogodek=c4ca4238a0b923820dcc509a6f75849b'>tukaj</a>.
+Vsi ostali lahko glasovanje v živo spremljajo <a href='https://bostjan.info/sklepnik/?dogodek=c4ca4238a0b923820dcc509a6f75849b'>tukaj</a>.
 <br/><br/>
 Ekipa sklepnika.";
 
@@ -86,7 +86,7 @@ https://bostjan.info/sklepnik/registracija.php?u=$u
 Povezave ne smeš deliti, saj je unikatna in omogoča glasovanje v tvojem imenu!
 
 Vsi ostali lahko glasovanje v živo spremljajo tukaj:
-https://bostjan.info/sklepnik/pregled.php?dogodek=c4ca4238a0b923820dcc509a6f75849b
+https://bostjan.info/sklepnik/?dogodek=c4ca4238a0b923820dcc509a6f75849b
 
 Ekipa sklepnika.";
 

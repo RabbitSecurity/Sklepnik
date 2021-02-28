@@ -26,10 +26,10 @@ include("login.php");
 
     <h2>Hitre informacje:</h2>
     <ul>
-        <li><a href='pregled.php?dogodek=<?php echo $dogodek_row->access_key; ?>'>Link za sprotno spremljanje
+        <li><a href='?dogodek=<?php echo $dogodek_row->access_key; ?>'>Link za sprotno spremljanje
                 rezultatov</a> (brez glasovanja)
         </li>
-        <li><a href='pregled.php?dogodek=<?php echo $dogodek_row->access_key; ?>'>Seznam že postavljenih sklepov in
+        <li><a href='rezultati.php?dogodek=<?php echo $dogodek_row->access_key; ?>'>Seznam že postavljenih sklepov in
                 rezultatov</a></li>
     </ul>
 

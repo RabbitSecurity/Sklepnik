@@ -26,7 +26,7 @@ include("login.php");
 
     <h2>Hitre informacje:</h2>
     <ul>
-        <li><a href='?dogodek=<?php echo $dogodek_row->access_key; ?>'>Link za sprotno spremljanje
+        <li><a href='/sklepnik/?dogodek=<?php echo $dogodek_row->access_key; ?>' target='blank'>Link za sprotno spremljanje
                 rezultatov</a> (brez glasovanja)
         </li>
         <li><a href='rezultati.php?dogodek=<?php echo $dogodek_row->access_key; ?>'>Seznam že postavljenih sklepov in

@@ -6,7 +6,7 @@ function kopirajLink(e, id, key) {
 	$('povezava').style.top = (e.pageY+10) + 'px'
 	$('povezava').style.left = (e.pageX+10) + 'px'
 	
-	$('povezava-link').value = 'https://bostjan.info/sklepnik/registracija.php?u=' + key;
+	$('povezava-link').value = window.location.origin + '/sklepnik/registracija.php?u=' + key;
 
 	/* Get the text field */
 	var copyText = $('povezava-link');

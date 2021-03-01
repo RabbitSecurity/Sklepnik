@@ -166,6 +166,7 @@ else {
 
     echo("delegati_index = " . json_encode($delegati));
     ?>;
+    //id delegata z odprto sejo damo v JS spremenljivko
     const trenutni_delegat = <?php echo $uporabnik_id; ?>;
 </script>
 

@@ -81,6 +81,7 @@ function pingResponse(txt) {
 		
 		for(var i = 0; i < delegati.length; i++) {
 
+			//posodobimo gumbe glede na stanje iz baze
 			if(delegati[i][0] == trenutni_delegat) {
 				if (delegati[i][1] > 0) {
 					glasuj(delegati[i][1],0);
@@ -252,7 +253,7 @@ function glasuj(glas, sendToBackend = 1) {
 	$('glas-' + glas).classList.remove('unselected');
 	$('glas-' + glas).classList.add('selected');
 	
-	//ce glasuje user pošlji glas oz. pravi token
+	//ce glasuje user pošlji glas oz. pravi token, lahko uporabimo tudi samo za posodabljanje gumbov
 	if ( sendToBackend ) {
 		ajax.post("glasuj.php", glasZabelezen, "v=" + vote_key + "&sklep=" + zadnji_sklep + "&token=" + vote_tokens[glas - 1]);
 	}

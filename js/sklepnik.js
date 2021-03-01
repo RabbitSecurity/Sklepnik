@@ -64,7 +64,8 @@ function pingResponse(txt) {
 		
 		//prikaži aktivne delegate:
 		var delegati = JSON.parse(lines[2]);
-		
+
+
 		$('st-delegatov').innerHTML = '(' + delegati.length + ')';
 		
 		var html = "";
@@ -79,6 +80,13 @@ function pingResponse(txt) {
 		var update_delegate = false;
 		
 		for(var i = 0; i < delegati.length; i++) {
+
+			if(delegati[i][0] == trenutni_delegat) {
+				if (delegati[i][1] > 0) {
+					glasuj(delegati[i][1],0);
+				}
+			}
+
 			barva = "grey";
 			if(delegati[i][1] > 0) {
 				barva = barve_glas[delegati[i][1] - 1];
@@ -189,21 +197,6 @@ function pingResponse(txt) {
 		//reload, največ 1x na minuto
 		if(lines[3].charAt(0) == 'r' && new Date().getTime()-page_load_time > 60*1000) {
 			location.reload();
-		}
-	}
-
-	//prikaz zadnjega glasu zabelezenega v bazi
-	if (lines[4] > "0") {
-		switch (lines[4]){
-			case ("1"):
-				glasuj(1,0);
-				break
-			case ("2"):
-				glasuj(2,0);
-				break
-			case ("3"):
-				glasuj(3,0);
-				break
 		}
 	}
 }

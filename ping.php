@@ -125,23 +125,6 @@ if($a == "ping") {
 	//pošlji v zadnji vrstici še morebiten JS ukaz
 	// 0 = nič, r = reload...
 	echo("0");
-    //dodaj se newline za ukazom
-    echo "\n";
-
-    //poslji zadnji glas iz baze, ce je sklep aktiven:
-    if($aktiven_sklep > 0) {
-        $query = mysql_query("select odgovor from sklepnik_glasovi where delegat_id = '$user_row->id' and sklep_id = '$aktiven_sklep' order by time desc limit 1");
-        if (mysql_num_rows($query) > 0) {
-            $row = mysql_fetch_object($query);
-            echo "$row->odgovor";
-        } else {
-            // ni se glasoval
-            echo "0";
-        }
-    } else {
-        //sklep ni aktiven
-        echo "-1";
-    }
 }
 
 if($a == "naslednji-sklep") {

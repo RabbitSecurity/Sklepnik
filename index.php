@@ -9,6 +9,7 @@ if(!empty($login_key)) {
 
 	if (mysql_num_rows($query) == 1) {
 		$user_row = mysql_fetch_object($query);
+        $uporabnik_id = $user_row->id;
 
 		$uporabnik = $user_row->ime . " " . $user_row->priimek . ", " . $user_row->rod . " (" . $user_row->obmocje_kratica . ")";
 	} else {
@@ -164,7 +165,8 @@ else {
     }
 
     echo("delegati_index = " . json_encode($delegati));
-    ?>
+    ?>;
+    const trenutni_delegat = <?php echo $uporabnik_id; ?>;
 </script>
 
 <?php

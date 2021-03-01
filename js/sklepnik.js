@@ -191,6 +191,21 @@ function pingResponse(txt) {
 			location.reload();
 		}
 	}
+
+	//prikaz zadnjega glasu zabelezenega v bazi
+	if (lines[4] > "0") {
+		switch (lines[4]){
+			case ("1"):
+				glasuj(1,0);
+				break
+			case ("2"):
+				glasuj(2,0);
+				break
+			case ("3"):
+				glasuj(3,0);
+				break
+		}
+	}
 }
 
 function prikaziSklep(txt) {
@@ -232,7 +247,7 @@ function prikaziSklep(txt) {
 	}
 }
 
-function glasuj(glas) {
+function glasuj(glas, sendToBackend = 1) {
 	$('glas-1').classList.remove('selected');
 	$('glas-2').classList.remove('selected');
 	$('glas-3').classList.remove('selected');
@@ -244,8 +259,10 @@ function glasuj(glas) {
 	$('glas-' + glas).classList.remove('unselected');
 	$('glas-' + glas).classList.add('selected');
 	
-	//pošlji glas oz. pravi token v bazo
-	ajax.post("glasuj.php", glasZabelezen, "v=" + vote_key + "&sklep=" + zadnji_sklep + "&token=" + vote_tokens[glas - 1]);
+	//ce glasuje user pošlji glas oz. pravi token
+	if ( sendToBackend ) {
+		ajax.post("glasuj.php", glasZabelezen, "v=" + vote_key + "&sklep=" + zadnji_sklep + "&token=" + vote_tokens[glas - 1]);
+	}
 	
 	glas_aktiven = true;
 	zadnji_glas = glas;

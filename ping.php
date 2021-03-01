@@ -56,20 +56,20 @@ if($a == "ping") {
 	echo("ok\n");
 	
 	//kateri dogodek je to vemo iz user_row->dogodek_id
-	
+
 	//id naslednjega/aktivnega sklepa:
 	$query = mysql_query("select * from sklepnik_sklepi where dogodek_id = '$dogodek_id' and time_start < NOW() order by time_end desc limit 1");
-	
+
 	$aktiven_sklep = -1;
 	if(mysql_num_rows($query) > 0) {
 		$row = mysql_fetch_object($query);
-		
+
 		//prikaži sklep samo, če je še aktiven
 		if(strtotime($row->time_end) > time()) {
 			echo("$row->id\n");
 			$aktiven_sklep = $row->id;
 		}
-		
+
 		//sicer vrni, ni sklepa.
 		else echo("-1\n");
 	}
@@ -125,6 +125,23 @@ if($a == "ping") {
 	//pošlji v zadnji vrstici še morebiten JS ukaz
 	// 0 = nič, r = reload...
 	echo("0");
+    //dodaj se newline za ukazom
+    echo "\n";
+
+    //poslji zadnji glas iz baze, ce je sklep aktiven:
+    if($aktiven_sklep > 0) {
+        $query = mysql_query("select odgovor from sklepnik_glasovi where delegat_id = '$user_row->id' and sklep_id = '$aktiven_sklep' order by time desc limit 1");
+        if (mysql_num_rows($query) > 0) {
+            $row = mysql_fetch_object($query);
+            echo "$row->odgovor";
+        } else {
+            // ni se glasoval
+            echo "0";
+        }
+    } else {
+        //sklep ni aktiven
+        echo "-1";
+    }
 }
 
 if($a == "naslednji-sklep") {

@@ -56,20 +56,20 @@ if($a == "ping") {
 	echo("ok\n");
 	
 	//kateri dogodek je to vemo iz user_row->dogodek_id
-	
+
 	//id naslednjega/aktivnega sklepa:
 	$query = mysql_query("select * from sklepnik_sklepi where dogodek_id = '$dogodek_id' and time_start < NOW() order by time_end desc limit 1");
-	
+
 	$aktiven_sklep = -1;
 	if(mysql_num_rows($query) > 0) {
 		$row = mysql_fetch_object($query);
-		
+
 		//prikaži sklep samo, če je še aktiven
 		if(strtotime($row->time_end) > time()) {
 			echo("$row->id\n");
 			$aktiven_sklep = $row->id;
 		}
-		
+
 		//sicer vrni, ni sklepa.
 		else echo("-1\n");
 	}

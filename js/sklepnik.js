@@ -64,7 +64,8 @@ function pingResponse(txt) {
 		
 		//prikaži aktivne delegate:
 		var delegati = JSON.parse(lines[2]);
-		
+
+
 		$('st-delegatov').innerHTML = '(' + delegati.length + ')';
 		
 		var html = "";
@@ -79,6 +80,14 @@ function pingResponse(txt) {
 		var update_delegate = false;
 		
 		for(var i = 0; i < delegati.length; i++) {
+
+			//posodobimo gumbe glede na stanje iz baze
+			if(delegati[i][0] == trenutni_delegat) {
+				if (delegati[i][1] > 0) {
+					glasuj(delegati[i][1],0);
+				}
+			}
+
 			barva = "grey";
 			if(delegati[i][1] > 0) {
 				barva = barve_glas[delegati[i][1] - 1];
@@ -232,7 +241,7 @@ function prikaziSklep(txt) {
 	}
 }
 
-function glasuj(glas) {
+function glasuj(glas, sendToBackend = 1) {
 	$('glas-1').classList.remove('selected');
 	$('glas-2').classList.remove('selected');
 	$('glas-3').classList.remove('selected');
@@ -244,8 +253,10 @@ function glasuj(glas) {
 	$('glas-' + glas).classList.remove('unselected');
 	$('glas-' + glas).classList.add('selected');
 	
-	//pošlji glas oz. pravi token v bazo
-	ajax.post("glasuj.php", glasZabelezen, "v=" + vote_key + "&sklep=" + zadnji_sklep + "&token=" + vote_tokens[glas - 1]);
+	//ce glasuje user pošlji glas oz. pravi token, lahko uporabimo tudi samo za posodabljanje gumbov
+	if ( sendToBackend ) {
+		ajax.post("glasuj.php", glasZabelezen, "v=" + vote_key + "&sklep=" + zadnji_sklep + "&token=" + vote_tokens[glas - 1]);
+	}
 	
 	glas_aktiven = true;
 	zadnji_glas = glas;

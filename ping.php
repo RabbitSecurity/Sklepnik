@@ -107,7 +107,7 @@ if($a == "ping") {
 		else $glas = -1;
 		
 		//prikaži samo aktivne oz. če so oddali glas
-		if($this_time - strtotime($row->zadnji_ping) < 120 || array_key_exists($row->id, $oddani_glasovi)) {
+		if($this_time - strtotime($row->zadnji_ping) < 60 || array_key_exists($row->id, $oddani_glasovi)) {
 			
 			$aktivni[] = array((int)$row->id, (int)$glas, (int)$row->rod_id);
 		

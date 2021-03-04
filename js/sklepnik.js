@@ -85,6 +85,8 @@ function pingResponse(txt) {
 			if(delegati[i][0] == trenutni_delegat) {
 				if (delegati[i][1] > 0) {
 					glasuj(delegati[i][1],0);
+				} else {
+					pocisti_gumbe();
 				}
 			}
 
@@ -242,13 +244,7 @@ function prikaziSklep(txt) {
 }
 
 function glasuj(glas, sendToBackend = 1) {
-	$('glas-1').classList.remove('selected');
-	$('glas-2').classList.remove('selected');
-	$('glas-3').classList.remove('selected');
-
-	$('glas-1').classList.add('unselected');
-	$('glas-2').classList.add('unselected');
-	$('glas-3').classList.add('unselected');
+	pocisti_gumbe();
 
 	$('glas-' + glas).classList.remove('unselected');
 	$('glas-' + glas).classList.add('selected');
@@ -264,6 +260,17 @@ function glasuj(glas, sendToBackend = 1) {
 	//aktiviraj glasovalni timer (neaktivno)
 	//glas_timer = 10;
 	//if(!glas_aktiven) timer();
+}
+
+function pocisti_gumbe() {
+	$('glas-1').classList.remove('selected');
+	$('glas-2').classList.remove('selected');
+	$('glas-3').classList.remove('selected');
+
+	$('glas-1').classList.add('unselected');
+	$('glas-2').classList.add('unselected');
+	$('glas-3').classList.add('unselected');
+
 }
 
 function glasZabelezen(txt) {

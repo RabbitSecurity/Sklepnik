@@ -33,7 +33,7 @@ else {
 	
 	<link rel='stylesheet' href='admin.css?<?php echo filemtime("admin.css"); ?>'/>
 	
-	<script type="text/javascript" src="funkcije.js"></script>
+	<script type="text/javascript" src="js/funkcije.js"></script>
 </head>
 <body>
 

@@ -174,7 +174,7 @@ function pingResponse(txt) {
 		}
 		
 		//Prikaži sklepčnost
-		if(delegati.length >= pogoji_sklepcnost[0] && rodovi.length >= pogoji_sklepcnost[1] && obmocja.length >= pogoji_sklepcnost[0]) {
+		if(delegati.length >= pogoji_sklepcnost[0] && rodovi.length >= pogoji_sklepcnost[1] && obmocja.length >= pogoji_sklepcnost[2]) {
 			$('quorum-status-error').classList.add('is-hidden');
 			$('quorum-status-ok').classList.remove('is-hidden');
 			$('quorum-status-wait').classList.add('is-hidden');

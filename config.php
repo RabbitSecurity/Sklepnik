@@ -8,6 +8,18 @@ mysql_select_db('******') or die('Database select error');
 mysql_query("set names utf8");
 
 
+//Povezava do sklepnika
+define(Sklepnik_URL, "https://bostjan.info/sklepnik/");
+
+
+//SMTP podatki
+define("Sklepnik_SMTP_Port", 587);
+define("Sklepnik_SMTP_Host", '******');
+define("Sklepnik_SMTP_Encryption", '****');
+define('Sklepnik_SMTP_Username', '**********');
+define('Sklepnik_SMTP_Password', '**********');
+
+
 //Generiranje tokenov (naj ostane skrivnost)s
 
 //Funkcija za generiranje in preverjanje glasovalnega tokena

@@ -1,12 +1,23 @@
 <?php
 include("config.php");
-include("login.php");
+
+//Avtorizacija čez url ali čez HTTPS auth
+if(!empty($_GET['auth_key'])) {
+	$key = mysql_real_escape_string($_GET['auth_key']);
+	
+	$q = mysql_query("select * from sklepnik_dogodki where admin_pass_hash = '$key'");
+	if(mysql_num_rows($q) != 1) die("Authorization failed.");
+	
+	$dogodek_row = mysql_fetch_object($q);
+	$dogodek_id = $dogodek_row->id;
+}
+else include("login.php");
 
 //Je ključ uporabnika podan?
 $u = mysql_real_escape_string($_GET['u']);
 if(empty($u)) die("Neznan uporabnik #1.");
 
-$query = mysql_query("select * from sklepnik_delegati where login_key = '$u'");
+$query = mysql_query("select * from sklepnik_delegati where login_key = '$u' and dogodek_id = '$dogodek_id'");
 if(mysql_num_rows($query) != 1) die("Neznan uporabnik #2.");
 	
 //očitno uporabnik obstaja...
@@ -39,17 +50,17 @@ $phpMailer->CharSet = 'UTF-8';
 /** Nastavitve poštnih strežnikov **/
 
 //Set the hostname of the mail server
-$phpMailer->Host = 'smtp.office365.com';
+$phpMailer->Host = Sklepnik_SMTP_Host;
 
 //Set the SMTP port number - likely to be 25, 465 or 587
-$phpMailer->Port = 587;
+$phpMailer->Port = Sklepnik_SMTP_Port;
 
 
 $phpMailer->SMTPAuth = true;
-$phpMailer->SMTPSecure = "starttls";
+$phpMailer->SMTPSecure = Sklepnik_SMTP_Encryption;
 
-$phpMailer->Username = 'zts.it@taborniki.si';
-$phpMailer->Password = '********'; 
+$phpMailer->Username = Sklepnik_SMTP_Username;
+$phpMailer->Password = Sklepnik_SMTP_Password; 
 
 $phpMailer->setFrom('zts.it@taborniki.si', 'ZTS IT ekipa');
 $phpMailer->addReplyTo('zts.it@taborniki.si', 'zts.it@taborniki.si');
@@ -71,22 +82,22 @@ $phpMailer->Subject = 'Povezava za online glasovanje';
 
 //Vsebina maila
 $mail_html = "Pozdravljen_a $ime !<br/><br/>Pošiljamo ti povezavo do on-line glasovanja:<br/>
-<a href='https://bostjan.info/sklepnik/registracija.php?u=$u'>https://bostjan.info/sklepnik/registracija.php?u=$u</a><br/>
+<a href='".Sklepnik_URL."registracija.php?u=$u'>https://bostjan.info/sklepnik/registracija.php?u=$u</a><br/>
 <br/>
 <b>Povezave ne smeš deliti</b>, saj je unikatna in omogoča glasovanje v tvojem imenu.<br/>
 <br/>
-Vsi ostali lahko glasovanje v živo spremljajo <a href='https://bostjan.info/sklepnik/?dogodek=$u'>tukaj</a>.
+Vsi ostali lahko glasovanje v živo spremljajo <a href='".Sklepnik_URL."?dogodek=".$dogodek_row->access_key."'>tukaj</a>.
 <br/><br/>
 Ekipa sklepnika.";
 
 //Tekstovna verzija
 $mail_text = "Pozdravljen_a $ime !\n\nPošiljamo ti povezavo do on-line glasovanja:
-https://bostjan.info/sklepnik/registracija.php?u=$u
+".Sklepnik_URL."registracija.php?u=$u
 
 Povezave ne smeš deliti, saj je unikatna in omogoča glasovanje v tvojem imenu!
 
 Vsi ostali lahko glasovanje v živo spremljajo tukaj:
-https://bostjan.info/sklepnik/?dogodek=$u
+".Sklepnik_URL."?dogodek=".$dogodek_row->access_key."
 
 Ekipa sklepnika.";
 

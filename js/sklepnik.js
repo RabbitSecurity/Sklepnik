@@ -104,12 +104,18 @@ function pingResponse(txt) {
 				html += `<div class="has-background-${barva}">${delegat}</div>`;
 				
 				//rod v obliki Ime (kratica)
-				var rod = delegati_index[delegat_id][2] + " (" + delegati_index[delegat_id][1] + ")";
-				if(rodovi.indexOf(rod) < 0) rodovi.push(rod);
+				var rod_kratica = delegati_index[delegat_id][1];
+				
+				//Ignoriraj rod "ZTS" ker ne štejejo v sklepčnost
+				var rod = delegati_index[delegat_id][2] + " (" + rod_kratica + ")";
+				if(rod_kratica != "ZTS" && rodovi.indexOf(rod) < 0) rodovi.push(rod);
 				
 				//obmocje v obliki Ime (kratica)
-				var obmocje = delegati_index[delegat_id][4] + " (" + delegati_index[delegat_id][3] + ")";
-				if(obmocja.indexOf(obmocje) < 0) obmocja.push(obmocje);
+				var obmocje_kratica = delegati_index[delegat_id][3];
+				
+				//Ignoriraj območje "ZTS" ker ne štejejo v sklepčnost
+				var obmocje = delegati_index[delegat_id][4] + " (" + obmocje_kratica + ")";
+				if(obmocje_kratica != "ZTS" && obmocja.indexOf(obmocje) < 0) obmocja.push(obmocje);
 			}
 			//delegata ni v indeksu?
 			//-> lahko da je bil kdo dodan naknadno

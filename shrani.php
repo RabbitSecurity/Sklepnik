@@ -60,7 +60,7 @@ if($a == "koncaj-uvoz") {
 		//Proxy uporabljam zato, da nimam še kle not vse mail kode
 		//Realno za velik mailov rabiš nek kompliciran sistem počasnega pošiljanja...
 		if($poslji_maile == 1) {
-			file_get_contents("https://bostjan.info/sklepnik/poslji-mail.php?u=".$login_key);
+			file_get_contents("https://bostjan.info/sklepnik/poslji-mail.php?u=".$login_key."&auth_key=".$dogodek->admin_pass_hash);
 			usleep(200); //100us + seveda ping time itd.
 		}
 	}

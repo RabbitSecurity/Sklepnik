@@ -41,8 +41,13 @@ include("login.php");
 
     <form action='shrani.php?a=postavi-sklep' method='post'>
 
-        Besedilo sklepa: <input type='text' name='vprasanje' value=''/><br/>
-        Pojasnilo: <input type='text' name='pojasnilo' value=''/><br/>
+        Besedilo sklepa:<br/>
+		<textarea name='vprasanje' style='width:300px;height:50px;'></textarea>
+		<br/>
+		<br/>
+		Pojasnilo:<br/>
+        <textarea name='pojasnilo' style='width:300px;height:50px;'></textarea>
+		<br/>
         <small>(prikazno tako kot tale tekst tuki, opcijsko.)</small>
 
         <br/><br/>
@@ -117,6 +122,9 @@ include("login.php");
 	Če kateri od kandidatov nima povezave, mu lahko ponovno pošlješ mail (📧) ali mu kako drugače skopiraš link (klikni 🔗 in potem Ctrl+V kamorkoli že).
 	<br/>
 	<br/>
+	Delegati so sortirani po rodovih in nato po imenu.
+	<br/>
+	<br/>
 	<table id='tabela-delegatov'>
 			<tr class='header'><td>Ime</td><td>Priimek</td><td>Email</td><td>Rod</td><td>Kratica</td><td>Območje</td><td>Kratica</td><td>Registriran</td><td colspan='3'>Orodja</td></tr>");
 
@@ -179,6 +187,9 @@ include("login.php");
 
         <br/><br/>
         <input type='submit' name='power' value='Uvozi podatke'/>
+		
+		<br/><br/>
+		Opomba: uvoz podatkov <u>ohrani dosedanje podatke</u>, zato uvoz dopolnjene datoteke lahko povzroči podvajanje.
     </form>
 
 </div>

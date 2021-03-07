@@ -38,13 +38,12 @@ else {
 <body>
 
 <h1><?php echo $dogodek_row->ime; ?></h1>
-<small>Rezultati online glasovanja</small>
 
 <div id='content'>
 <h2>Seznam sklepov in izidov:</h2>
 
 <small>Seznam se ne osvežuje samodejno, za osvežitev <a href='#' onclick='location.reload();'>ponovno naloži stran</a>.</small>
-<br/><br/>
+<div class="sklepi">
 <?php
 $query = mysql_query("select * from sklepnik_sklepi where dogodek_id = '$dogodek_row->id' order by time_end");
 
@@ -57,6 +56,7 @@ if(mysql_num_rows($query) > 0) {
 	while($row = mysql_fetch_object($query)) {
 		
 		//besedilo sklepa
+        echo("<div class='sklep'>");
 		echo("<h2>$num. $row->vprasanje</h2>");
 		$num++;
 		
@@ -85,8 +85,8 @@ if(mysql_num_rows($query) > 0) {
 		$pct2 = round($glasovi[2]/$vseh*100, 1);
 		$pct3 = round($glasovi[3]/$vseh*100, 1);
 		
-		echo("Oddanih glasov: $vseh<br/>
-		<br/>
+		echo("<div class='sklep-rezultati'>
+        <p>Oddanih glasov: $vseh</p>
 		<table>
 			<tr><td></td><td align='center'>Glasov</td><td align='center'>Delež</td></tr>
 			<tr><td align='right'>ZA:</td><td align='center'>".$glasovi[1]."</td><td align='center'>$pct1%</td></tr>
@@ -95,7 +95,7 @@ if(mysql_num_rows($query) > 0) {
 		</table>");
 		
 		echo("<br/>
-		<a href='#seznam-$num' onClick='toggleSeznam($num);return false;'>+ Poimenski seznam glasov</a>");
+		<a href='#seznam-$num' class='poimenski-seznam-toggle' onClick='toggleSeznam($num);return false;'>+ Poimenski seznam glasov</a>");
 		
 		echo("<div class='poimenski-seznam' id='seznam-$num'>
 		<table>
@@ -110,7 +110,7 @@ if(mysql_num_rows($query) > 0) {
 			}
 		}
 		
-		echo("</table></div><br/><br/>\n\n");
+		echo("</table></div></div></div>\n\n");
 	}
 }
 else {
@@ -118,6 +118,7 @@ else {
 }
 ?>
 
+</div>
 </div>
 
 </body>

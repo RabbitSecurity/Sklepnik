@@ -53,15 +53,11 @@ else {
     //Ali je dogodek trenutno aktiven?
     $now = time();
     if (strtotime($dogodek->time_start) > $now) {
-        echo("<h2>Dogodek se še ni začel...</h2>
-	<small>Rana ura, slovenskih fantov grob.</small>");
-    } //Dogodka je že konec
+        include_once("templates/pred-dogodkom.php");
+    }
     else if (strtotime($dogodek->time_end) < $now) {
-        echo("<h2>Dogodka je že konec :(</h2>
-	<small>Več sreče prihodnjič.</small>
-	<br/><br/>
-	Klikni <a href='rezultati.php?dogodek=" . $dogodek->access_key . "'>tukaj</a> za ogled rezultatov glasovanja.</a>");
-    } //Dogodek je aktiven! :)
+        include_once("templates/po-dogodku.php");
+    }
     else {
     ?>
     <div class="section">

@@ -40,7 +40,6 @@ big, strong {
 }
 
 #content {
-	min-width: 450px;
 	max-width:900px;
 	line-height:1.3;
 	margin-top:25px;
@@ -148,6 +147,19 @@ tfoot tr, tfoot td {
 	background-color:#91a6d4;
 }
 
+.sklepi,
+.sklep-rezultati {
+	margin-left: 2em;
+}
+
+.sklep {
+	margin: 5em 0;
+}
+
+.sklep:first-child {
+	margin-top: 2em;
+}
+
 /* div s poimensko tabelo */
 .poimenski-seznam {
 	margin-top:20px;
@@ -162,4 +174,11 @@ tfoot tr, tfoot td {
 #footer {
 	margin-top:40px;
 	padding:0;
+}
+
+@media print {
+	.poimenski-seznam,
+	.poimenski-seznam-toggle {
+		display: none;
+	}
 }

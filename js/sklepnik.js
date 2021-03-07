@@ -35,17 +35,20 @@ function pinger() {
 			$('conn-status-error').classList.add('is-hidden');
 			$('conn-status-ok').classList.remove('is-hidden');
 			$('conn-status-wait').classList.add('is-hidden');
+			$('conn-notification').classList.add('is-hidden');
 		}
 		else {
 			$('conn-status-error').classList.remove('is-hidden');
 			$('conn-status-ok').classList.add('is-hidden');
 			$('conn-status-wait').classList.add('is-hidden');
+			$('conn-notification').classList.remove('is-hidden');
 		}
 	}
 	else {
 		$('conn-status-error').classList.add('is-hidden');
 		$('conn-status-ok').classList.add('is-hidden');
 		$('conn-status-wait').classList.remove('is-hidden');
+		$('conn-notification').classList.add('is-hidden');
 	}
 }
 window.onload = pinger;

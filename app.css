@@ -25,6 +25,17 @@
 .navbar.is-primary .navbar-end>a.navbar-item:focus {
 	background: none;
 }
+
+.notification {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	max-width: 512px;
+	margin: 4em auto 0;
+	z-index: 100;
+}
+
 #odgovori {
 	text-align: center;
 }
@@ -67,7 +78,7 @@
 	content: "\f056";
 	margin-right: 0.5em;
 }
-#trenuten-potek table {
+.rezultati-tabela {
 	width: 100%;
 	min-width: 512px;
 	table-layout: fixed;
@@ -77,5 +88,16 @@
 	#odgovori .button {
 		width: 100%;
 		margin: 0.5em 0;
+	}
+	.rezultati-tabela {
+		min-width: auto;
+	}
+	.rezultati-tabela tr {
+		display: block;
+		float: left;
+		width: 50%;
+	}
+	.rezultati-tabela th, .rezultati-tabela td {
+		display: block;
 	}
 }

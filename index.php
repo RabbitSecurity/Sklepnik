@@ -47,21 +47,22 @@ else {
 
 <?php include_once("templates/header.php") ?>
 
+<div id="conn-notification" class="notification is-danger is-light notification is-hidden">
+    <b>Povezava s strežnikom je bila prekinjena.</b> <br/>
+    <p>Podatki se ne osvežujejo. Preveri svojo internetno povezavo.</p>
+</div>
+
 <div id='content'>
 
     <?php
     //Ali je dogodek trenutno aktiven?
     $now = time();
     if (strtotime($dogodek->time_start) > $now) {
-        echo("<h2>Dogodek se še ni začel...</h2>
-	<small>Rana ura, slovenskih fantov grob.</small>");
-    } //Dogodka je že konec
+        include_once("templates/pred-dogodkom.php");
+    }
     else if (strtotime($dogodek->time_end) < $now) {
-        echo("<h2>Dogodka je že konec :(</h2>
-	<small>Več sreče prihodnjič.</small>
-	<br/><br/>
-	Klikni <a href='rezultati.php?dogodek=" . $dogodek->access_key . "'>tukaj</a> za ogled rezultatov glasovanja.</a>");
-    } //Dogodek je aktiven! :)
+        include_once("templates/po-dogodku.php");
+    }
     else {
     ?>
     <div class="section">
@@ -90,21 +91,18 @@ else {
             <div id='trenuten-potek' style='display:none;'>
                 <p class="has-text-grey">Rezultati trenutnega glasovanja:</p>
                 <div class="table-container">
-                    <table class="table is-bordered">
-                        <thead>
+                    <table class="table is-bordered rezultati-tabela">
+
                         <tr>
                             <th>ZA</th>
                             <th>PROTI</th>
                             <th>VZDRŽANI</th>
                         </tr>
-                        </thead>
-                        <tbody>
                         <tr>
                             <td id='glasovi-za'></td>
                             <td id='glasovi-proti'></td>
                             <td id='glasovi-vzdrzani'></td>
                         </tr>
-                        </tbody>
                     </table>
                 </div>
                 <p class="">Št. oddanih glasov: <b id='glasov'>?</b> (<span id='udelezba'>?</span>% prisotnih)</p>

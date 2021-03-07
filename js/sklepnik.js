@@ -29,14 +29,17 @@ function pinger() {
 	ajax.get("ping.php?a=ping&u=" + login_key + "&aktiven=" + aktiven, pingResponse)
 	setTimeout("pinger()", ping_interval);
 	
+	var now = new Date().getTime();
+	
 	if(first_ping) {
 		//prikaži aktivnost povezave (10s)
-		if(new Date().getTime() - last_response < 10000) {
+		if(now - last_response < 10000) {
 			$('conn-status-error').classList.add('is-hidden');
 			$('conn-status-ok').classList.remove('is-hidden');
 			$('conn-status-wait').classList.add('is-hidden');
 			$('conn-notification').classList.add('is-hidden');
 		}
+		//povezava (ponovno) vzpostavljena
 		else {
 			$('conn-status-error').classList.remove('is-hidden');
 			$('conn-status-ok').classList.add('is-hidden');
@@ -51,7 +54,11 @@ function pinger() {
 		$('conn-notification').classList.add('is-hidden');
 	}
 }
-window.onload = pinger;
+
+//Premaknjeno na page, da se zažene samo če je dogodek aktiven
+//window.onload = pinger;
+
+
 
 function pingResponse(txt) {
 	first_ping = true;

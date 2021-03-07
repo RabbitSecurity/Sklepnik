@@ -10,7 +10,7 @@
     <link href="assets/css/all.css" rel="stylesheet">
 
     <script type="text/javascript" src="js/funkcije.js"></script>
-    <script type="text/javascript" src="js/sklepnik.js?<?php echo filemtime("sklepnik.js"); ?>"></script>
+    <script type="text/javascript" src="js/sklepnik.js?<?php echo filemtime("js/sklepnik.js"); ?>"></script>
 </head>
 <body>
 

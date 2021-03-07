@@ -166,6 +166,9 @@ else {
     ?>;
     //id delegata z odprto sejo damo v JS spremenljivko
     const trenutni_delegat = <?php echo (!$passive_user) ? $uporabnik_id : -1; ?>;
+	
+	//vklopi pinger
+	window.onload = pinger;
 </script>
 
 <?php

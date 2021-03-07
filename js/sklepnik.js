@@ -15,9 +15,11 @@ var first_ping = false;
 var last_response = 0;
 var page_load_time = new Date().getTime();
 
+var last_ping_time = page_load_time;
+var connection_errors = 0;
+
 //Glasovalni žetoni za aktualen sklep
 var vote_tokens = [];
-
 
 function pinger() {
 
@@ -31,21 +33,44 @@ function pinger() {
 	
 	var now = new Date().getTime();
 	
+	//štej št. napak v povezavi
+	//če je prvi ping po dolgem času mu daj malo miru (da na telefonu ni lažnih alarmov)
+	if(now - last_ping_time > ping_interval*5) {
+		connection_errors = 0;
+	}
+	
 	if(first_ping) {
 		//prikaži aktivnost povezave (10s)
 		if(now - last_response < 10000) {
-			$('conn-status-error').classList.add('is-hidden');
-			$('conn-status-ok').classList.remove('is-hidden');
-			$('conn-status-wait').classList.add('is-hidden');
-			$('conn-notification').classList.add('is-hidden');
+			//povezava je OK
+			showConnectionWarning(false);
 		}
-		//povezava (ponovno) vzpostavljena
 		else {
-			$('conn-status-error').classList.remove('is-hidden');
-			$('conn-status-ok').classList.add('is-hidden');
-			$('conn-status-wait').classList.add('is-hidden');
-			$('conn-notification').classList.remove('is-hidden');
+			//povezava prekinjena
+			connection_errors++;
+			
+			//če ni prvi ping po dolgem času
+			if(connection_errors > 3) {
+				showConnectionWarning(true);
+			}
 		}
+	}
+	else {
+		showConnectionWarning(false);
+	}
+	
+	last_ping_time = now;
+}
+
+//Premaknjeno na page, da se zažene samo če je dogodek aktiven
+//window.onload = pinger;
+
+function showConnectionWarning(show) {
+	if(show) {
+		$('conn-status-error').classList.remove('is-hidden');
+		$('conn-status-ok').classList.add('is-hidden');
+		$('conn-status-wait').classList.add('is-hidden');
+		$('conn-notification').classList.remove('is-hidden');
 	}
 	else {
 		$('conn-status-error').classList.add('is-hidden');
@@ -55,17 +80,17 @@ function pinger() {
 	}
 }
 
-//Premaknjeno na page, da se zažene samo če je dogodek aktiven
-//window.onload = pinger;
-
-
 
 function pingResponse(txt) {
 	first_ping = true;
 	
 	var lines = txt.split("\n");
 	if(lines[0] == "ok") {
+		
+		//zabeleži in prikaži da je povezava ok
 		last_response = new Date().getTime();
+		connection_errors = 0;
+		showConnectionWarning(false);
 		
 		//a je na voljo za glasovanje že kak nov sklep?
 		if(zadnji_sklep != lines[1]) {

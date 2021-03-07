@@ -86,21 +86,18 @@ else {
             <div id='trenuten-potek' style='display:none;'>
                 <p class="has-text-grey">Rezultati trenutnega glasovanja:</p>
                 <div class="table-container">
-                    <table class="table is-bordered">
-                        <thead>
+                    <table class="table is-bordered rezultati-tabela">
+
                         <tr>
                             <th>ZA</th>
                             <th>PROTI</th>
                             <th>VZDRŽANI</th>
                         </tr>
-                        </thead>
-                        <tbody>
                         <tr>
                             <td id='glasovi-za'></td>
                             <td id='glasovi-proti'></td>
                             <td id='glasovi-vzdrzani'></td>
                         </tr>
-                        </tbody>
                     </table>
                 </div>
                 <p class="">Št. oddanih glasov: <b id='glasov'>?</b> (<span id='udelezba'>?</span>% prisotnih)</p>

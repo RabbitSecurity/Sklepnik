@@ -47,6 +47,11 @@ else {
 
 <?php include_once("templates/header.php") ?>
 
+<div id="conn-notification" class="notification is-danger is-light notification is-hidden">
+    <b>Povezava s strežnikom je bila prekinjena.</b> <br/>
+    <p>Podatki se ne osvežujejo. Preveri svojo internetno povezavo.</p>
+</div>
+
 <div id='content'>
 
     <?php

@@ -45,8 +45,20 @@
             <br/>
 
             <a class="navbar-item" target="_blank" href="rezultati.php?dogodek=<?php echo($dogodek->access_key); ?>">Rezultati</a>
-            <a class="navbar-item" target="_blank" href="https://www.google.com">Gradivo</a>
 
+            <div class="navbar-item has-dropdown is-hoverable">
+                <a class="navbar-link">Povezave</a>
+
+                <div class="navbar-dropdown">
+                    <a class="navbar-item" target="_blank" href="#">Zoom link</a>
+                    <a class="navbar-item" target="_blank" href="#">Prijava k razpravi</a>
+                    <a class="navbar-item" target="_blank" href="#">Predlog sklepa</a>
+                    <hr class="navbar-divider">
+                    <a class="navbar-item" target="_blank" href="https://www.stencas.si/?password_protected_pwd=<?php echo(stencas_password); ?>&wp-submit=Log%20In&testcookie=1&password-protected=login&redirect_to=https://www.stencas.si/40.-skupscina-zts">Gradivo za skupščino</a>
+                    <hr class="navbar-divider">
+                    <a class="navbar-item" target="_blank" href="mailto:zts.it@taborniki.si">Potrebujem pomoč</a>
+                </div>
+            </div>
             <br/>
 
             <!-- ikone za sklepcnost-->

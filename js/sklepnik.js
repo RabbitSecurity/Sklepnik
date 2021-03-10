@@ -173,6 +173,8 @@ function pingResponse(txt) {
 		var vsota = glasovi[0]+glasovi[1]+glasovi[2];
 		if(vsota > 0) {
 			//prikaži aktivne rezultate
+			$('sklep-sprejet').classList.add('is-hidden');
+			$('sklep-zavrnjen').classList.add('is-hidden');
 			
 			$('glasov').innerHTML = vsota;
 			
@@ -183,6 +185,13 @@ function pingResponse(txt) {
 			$('udelezba').innerHTML = pct(vsota/delegati.length);
 			
 			$('trenuten-potek').style.display = 'block';
+
+			// ali je sklep sprejet/zavrnjen?
+			if ((glasovi[0])/delegati.length > 0.5) {
+				$('sklep-sprejet').classList.remove('is-hidden');
+			} else if ((glasovi[1])/delegati.length > 0.5) {
+				$('sklep-zavrnjen').classList.remove('is-hidden');
+			}
 			
 		}
 		else {

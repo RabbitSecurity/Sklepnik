@@ -47,7 +47,7 @@ else {
 
 <?php include_once("templates/header.php") ?>
 
-<div id="conn-notification" class="notification is-danger is-light notification is-hidden">
+<div id="conn-notification" class="notification notification-toast is-danger is-light is-hidden">
     <b>Povezava s strežnikom je bila prekinjena.</b> <br/>
     <p>Podatki se ne osvežujejo. Preveri svojo internetno povezavo.</p>
 </div>
@@ -92,7 +92,6 @@ else {
                 <p class="has-text-grey">Rezultati trenutnega glasovanja:</p>
                 <div class="table-container">
                     <table class="table is-bordered rezultati-tabela">
-
                         <tr>
                             <th>ZA</th>
                             <th>PROTI</th>
@@ -105,6 +104,14 @@ else {
                         </tr>
                     </table>
                 </div>
+
+                <div id="sklep-sprejet" class="is-success notification is-hidden">
+                    Sklep je <b>podprlo</b> več kot 50% navzočih.
+                </div>
+                <div id="sklep-zavrnjen" class="is-danger notification is-hidden">
+                    Sklep je <b>zavrnilo</b> več kot 50% navzočih.
+                </div>
+
                 <p class="">Št. oddanih glasov: <b id='glasov'>?</b> (<span id='udelezba'>?</span>% prisotnih)</p>
             </div>
 

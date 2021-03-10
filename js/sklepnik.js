@@ -43,7 +43,7 @@ function pinger() {
 		//prikaži aktivnost povezave (10s)
 		if(now - last_response < 10000) {
 			//povezava je OK
-			showConnectionWarning(false);
+			showConnectionStatus(0)
 		}
 		else {
 			//povezava prekinjena
@@ -51,12 +51,12 @@ function pinger() {
 			
 			//če ni prvi ping po dolgem času
 			if(connection_errors > 3) {
-				showConnectionWarning(true);
+				showConnectionStatus(1);
 			}
 		}
 	}
 	else {
-		showConnectionWarning(false);
+		showConnectionStatus(-1);
 	}
 	
 	last_ping_time = now;
@@ -65,17 +65,25 @@ function pinger() {
 //Premaknjeno na page, da se zažene samo če je dogodek aktiven
 //window.onload = pinger;
 
-function showConnectionWarning(show) {
-	if(show) {
+// -1 = loading
+//  0 = connection ok
+//  1 = connection error
+function showConnectionStatus(status) {
+	if(status > 0) {
 		$('conn-status-error').classList.remove('is-hidden');
 		$('conn-status-ok').classList.add('is-hidden');
 		$('conn-status-wait').classList.add('is-hidden');
 		$('conn-notification').classList.remove('is-hidden');
 	}
-	else {
+	else if (status < 0) {
 		$('conn-status-error').classList.add('is-hidden');
 		$('conn-status-ok').classList.add('is-hidden');
 		$('conn-status-wait').classList.remove('is-hidden');
+		$('conn-notification').classList.add('is-hidden');
+	} else {
+		$('conn-status-error').classList.add('is-hidden');
+		$('conn-status-ok').classList.remove('is-hidden');
+		$('conn-status-wait').classList.add('is-hidden');
 		$('conn-notification').classList.add('is-hidden');
 	}
 }
@@ -90,7 +98,7 @@ function pingResponse(txt) {
 		//zabeleži in prikaži da je povezava ok
 		last_response = new Date().getTime();
 		connection_errors = 0;
-		showConnectionWarning(false);
+		showConnectionStatus(0);
 		
 		//a je na voljo za glasovanje že kak nov sklep?
 		if(zadnji_sklep != lines[1]) {

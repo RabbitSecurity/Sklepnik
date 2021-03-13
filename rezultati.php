@@ -64,9 +64,10 @@ if(mysql_num_rows($query) > 0) {
 		
 		//števci glasov
 		$glasovi = array(
-			'1' => 0,
-			'2' => 0,
-			'3' => 0
+			'0' => 0,  //prazen glas (prisoten, ni glasoval)
+			'1' => 0,  // ZA
+			'2' => 0,  // PROTI
+			'3' => 0   // VZDRŽAN
 		);
 		
 		//seznam
@@ -78,15 +79,16 @@ if(mysql_num_rows($query) > 0) {
 			$seznam[$r->delegat_id] = $r->odgovor;
 		}
 		
-		$vseh = array_sum($glasovi);
+		$prisotnih = array_sum($glasovi);
+		$veljavnih = $glasovi[1] + $glasovi[2] + $glasovi[3];
 		
 		//deleži
-		$pct1 = round($glasovi[1]/$vseh*100, 1);
-		$pct2 = round($glasovi[2]/$vseh*100, 1);
-		$pct3 = round($glasovi[3]/$vseh*100, 1);
+		$pct1 = round($glasovi[1]/$prisotnih*100, 1);
+		$pct2 = round($glasovi[2]/$prisotnih*100, 1);
+		$pct3 = round($glasovi[3]/$prisotnih*100, 1);
 		
 		echo("<div class='sklep-rezultati'>
-        <p>Oddanih glasov: $vseh</p>
+        <p>Prisotnih $prisotnih, oddanih glasov: $veljavnih (".round($veljavnih/$prisotnih*100, 1)." %)</p>
 		<table>
 			<tr><td></td><td align='center'>Glasov</td><td align='center'>Delež</td></tr>
 			<tr><td align='right'>ZA:</td><td align='center'>".$glasovi[1]."</td><td align='center'>$pct1%</td></tr>

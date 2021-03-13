@@ -44,14 +44,6 @@ if($a == "ping") {
 	
 	$now = date("Y-m-d H:i:s");
 	
-	if(!$pasiven_uporabnik) {
-		if($aktiven == "da") {
-			mysql_query("update sklepnik_delegati set zadnji_ping = '$now', zadnjic_aktiven = '$now' where id = '$user_row->id'");
-		}
-		else {
-			mysql_query("update sklepnik_delegati set zadnji_ping = '$now' where id = '$user_row->id'");
-		}
-	}
 	
 	echo("ok\n");
 	
@@ -77,6 +69,30 @@ if($a == "ping") {
 		echo("-1\n");
 	}
 	
+	//označi ping in zadnji sklep pri katerem je sodeloval
+	//vrini tudi update zadnjega sklepa, če ta še ni zapisan.
+	if(!$pasiven_uporabnik) {
+		
+		//vnesi prazen glas, če še ni oddan
+		$zadnji_sklep_sql = "";
+		if($aktiven_sklep > 0 && $user_row->last_sklep_id < $aktiven_sklep) {
+			
+			//dodaj update tega stolpca v user tabeli
+			$zadnji_sklep_sql = ", last_sklep_id = '$aktiven_sklep' ";
+			
+			//vnesi prazen glas v tabelo odgovorov
+			mysql_query("insert into sklepnik_glasovi (delegat_id, sklep_id, odgovor) values ('$user_row->id', '$aktiven_sklep', '0')");
+		}
+	
+		if($aktiven == "da") {
+			mysql_query("update sklepnik_delegati set zadnji_ping = '$now', zadnjic_aktiven = '$now' $zadnji_sklep_sql where id = '$user_row->id'");
+		}
+		else {
+			mysql_query("update sklepnik_delegati set zadnji_ping = '$now' $zadnji_sklep_sql where id = '$user_row->id'");
+		}
+	}
+	
+	
 	//če je sklep aktiven, pokaži tudi rezultate glasovanja
 	$oddani_glasovi = array();
 	if($aktiven_sklep > 0) {
@@ -98,7 +114,7 @@ if($a == "ping") {
 	
 	while($row = mysql_fetch_object($query)) {
 		
-		//prikaži njegov zadnji glas, če obstaja
+		//prikaži uporabnikov zadnji glas, če obstaja
 		if($aktiven_sklep > 0) {
 			if(array_key_exists($row->id, $oddani_glasovi)) $glas = $oddani_glasovi[$row->id];
 			else $glas = -1;

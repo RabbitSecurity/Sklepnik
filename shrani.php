@@ -51,7 +51,7 @@ if($a == "koncaj-uvoz") {
 		$login_key = randomString(50);
 		$vote_key = randomString(50);
 		
-		// ?preveri, da so stringi res unique? (mislm, sej, verjetnost je skoraj oz. 1:10^80...)
+		// ?preveri, da so stringi res unique? (mislm, sej, verjetnost je skoraj 0 oz. 1:10^80...)
 		
 		//in ga daj v bazo...
 		mysql_query("insert into sklepnik_delegati (ime, priimek, email, rod, rod_kratica, obmocje, obmocje_kratica, funkcija, dogodek_id, registriran, login_key, vote_key) values ('$ime', '$priimek', '$email', '$rod', '$rod_kratica', '$obmocje', '$obmocje_kratica', '$funkcija', '$dogodek_id', 'ne', '$login_key', '$vote_key')");
@@ -60,7 +60,7 @@ if($a == "koncaj-uvoz") {
 		//Proxy uporabljam zato, da nimam še kle not vse mail kode
 		//Realno za velik mailov rabiš nek kompliciran sistem počasnega pošiljanja...
 		if($poslji_maile == 1) {
-			file_get_contents("https://bostjan.info/sklepnik/poslji-mail.php?u=".$login_key."&auth_key=".$dogodek->admin_pass_hash);
+			file_get_contents("https://bostjan.info/sklepnik/poslji-mail.php?u=".$login_key."&auth_key=".$dogodek_row->admin_pass_hash);
 			usleep(200); //100us + seveda ping time itd.
 		}
 	}
@@ -127,10 +127,44 @@ if($a == "postavi-sklep") {
 	//Čas računaj v minutah
 	$cas = (float)$_POST['cas'];
 	
-	$time_start = date('Y-m-d H:i:s', time());
+	$time_start = date('Y-m-d H:i:s', time() + 3); //naprej premaknjen cas
 	$time_end = date('Y-m-d H:i:s', time() + $cas*60);
 	
+	//vnesi sklep s prihodnjim časom aka shekan lock sklepa
+	//da se ne zgodi podvajanje vnosov, vnesi najprej prihodnji čas, da se vmes izvedejo insert queriji
+	//preden sklep vidijo tudi delegati
 	mysql_query("insert into sklepnik_sklepi (vprasanje, pojasnilo, dogodek_id, time_start, time_end) values ('$vprasanje', '$opomba', '$dogodek_id', '$time_start', '$time_end')");
+	
+	//id novo vnešenega sklepa
+	$sklep_id = mysql_insert_id();
+	
+	//vnesi vsem prisotnim (ping < 60s nazaj) prazen odgovor.
+	$this_time = time();
+	$query = mysql_query("select * from sklepnik_delegati where dogodek_id = '$dogodek_id' order by rod_kratica, ime, priimek");
+	
+	$queries = array();
+	$delegati = array();
+	while($row = mysql_fetch_object($query)) {
+		
+		//prikaži samo aktivne oz. če so oddali glas
+		if($this_time - strtotime($row->zadnji_ping) < 60) {
+			$queries[] = "($row->id, $sklep_id, 0)";
+			$delegati[] = $row->id;
+		}
+	}
+	
+	//izvrši veliki inset query z vsemi vrednostmi
+	//in update query za vse upoštevane delegate
+	if(count($queries) > 0) {
+		mysql_query("insert into sklepnik_glasovi (delegat_id, sklep_id, odgovor) values ".implode(", ", $queries));
+		
+		mysql_query("update sklepnik_delegati set last_sklep_id = '$sklep_id' where id in (".implode(",", $delegati).")");
+	}
+	
+	//popravi čas sklepa na takoj zdaj (unlock sklep)
+	$time_start = date('Y-m-d H:i:s', time());
+	mysql_query("update sklepnik_sklepi set time_start = '$time_start' where id = '$sklep_id'");
+
 	
 	header("Location: admin.php");
 }

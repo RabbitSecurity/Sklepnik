@@ -1,11 +1,11 @@
 <?php
 
 //Povezava na bazo
-mysql_connect('localhost','****','****') or die('Database login error');
-mysql_select_db('******') or die('Database select error');
+mysqli_connect('localhost','root','') or die('Database login error');
+mysqli_select_db('baza2') or die('Database select error');
 
 //poskrbi, da povezava deluje kot je treba
-mysql_query("set names utf8");
+mysqli_query("set names utf8");
 
 
 //Povezava do sklepnika

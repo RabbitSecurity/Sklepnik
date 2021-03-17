@@ -26,7 +26,12 @@ function pinger() {
 	var aktiven = "ne";
 
 	//če to nekdo spremlja (npr na zoomu prek shared screen), lahko dobi tako informacije hitreje.
-	if(passive_user) ping_interval = 1000;
+	if(passive_user) ping_interval = 3000;
+	
+	//link s superhitrim osveževanjem
+	if(document.location.toString().indexOf('&hitreje!') > -1) {
+		ping_interval = 500;
+	}
 
 	ajax.get("ping.php?a=ping&u=" + login_key + "&aktiven=" + aktiven, pingResponse)
 	setTimeout("pinger()", ping_interval);

@@ -88,7 +88,7 @@ if(mysql_num_rows($query) > 0) {
 		$pct3 = round($glasovi[3]/$prisotnih*100, 1);
 		
 		echo("<div class='sklep-rezultati'>
-        <p>Prisotnih $prisotnih, oddanih glasov: $veljavnih (".round($veljavnih/$prisotnih*100, 1)." %)</p>
+        <p>Prisotnih $prisotnih, oddanih glasov: $veljavnih <!--(".round($veljavnih/$prisotnih*100, 1)." %)--></p>
 		<table>
 			<tr><td></td><td align='center'>Glasov</td><td align='center'>Delež</td></tr>
 			<tr><td align='right'>ZA:</td><td align='center'>".$glasovi[1]."</td><td align='center'>$pct1%</td></tr>
@@ -108,7 +108,10 @@ if(mysql_num_rows($query) > 0) {
 		foreach($delegati as $id => $delegat) {		
 			if(array_key_exists($id, $seznam)) {
 				$glas = $seznam[$id];
-				echo("<tr><td>$delegat->ime $delegat->priimek</td><td>$delegat->rod ($delegat->rod_kratica)</td><td>$delegat->obmocje ($delegat->obmocje_kratica)</td><td style='background-color:".$barve_glasov[$glas-1].";' align='center'>".$glasovi_txt[$glas-1]."</td></tr>\n");
+				
+				if($glas > 0) {
+					echo("<tr><td>$delegat->ime $delegat->priimek</td><td>$delegat->rod ($delegat->rod_kratica)</td><td>$delegat->obmocje ($delegat->obmocje_kratica)</td><td style='background-color:".$barve_glasov[$glas-1].";' align='center'>".$glasovi_txt[$glas-1]."</td></tr>\n");
+				}
 			}
 		}
 		

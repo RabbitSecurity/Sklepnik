@@ -6,5 +6,5 @@ node_modules/
 .vscode
 
 support/
-tmp/
+tmp/*
 config.php

@@ -78,7 +78,7 @@ include("login.php");
     <form action='shrani.php?a=dogodek-info' method='post'>
 
         Ime dogodka: <input type='text' name='ime' value='<?php echo $dogodek_row->ime; ?>'/><br/>
-        <br>
+        <br/>
         Datum in čas začetka: <input type='text' name='time_start'
                                      value='<?php echo $dogodek_row->time_start; ?>'/><br/>
         Datum in čas konca: <input type='text' name='time_end' value='<?php echo $dogodek_row->time_end; ?>'/><br/>
@@ -191,7 +191,31 @@ include("login.php");
 		<br/><br/>
 		Opomba: uvoz podatkov <u>ohrani dosedanje podatke</u>, zato uvoz dopolnjene datoteke lahko povzroči podvajanje.
     </form>
-
+	
+    <br/><br/>
+    <h2>Nastavitve emaila s podatki</h2>
+	
+	Tukaj lahko nastaviš vsebino emaila, ki ga prejmejo delegati ob pošiljanju personaliziranih povezav za glasovanje.
+	<br/><br/>
+	
+	<form action='shrani.php?a=dogodek-mail' method='post'>
+	
+	Zadeva emaila: <input type='text' name='subject' value='<?php echo $dogodek_row->mail_zadeva; ?>'/><br/>
+    <br>
+	Vsebina emaila (HTML):<br/>
+    <textarea name='content_html' style='width:500px;height:300px;'><?php echo $dogodek_row->mail_html; ?></textarea>
+	<br/>
+	<br/>
+	V besedilu lahko uporabiš ključne besede, ki bodo zamenjane s podatki delegata, kateremu se mail pošilja:<br/>
+	{delegat-link}, {delegat-ime}, {delegat-priimek}, {delegat-rod}, {delegat-rod-kratica}, {delegat-obmocje}, {delegat-obmocje-kratica}.
+	<br/>
+	<br/>
+	V vsebini je dovoljena uporaba HTML kode, nove vrstice (&lt;br/&gt;) bodo dodane avtomatsko.
+	
+	<br/>
+	<br/>
+	<input type='submit' name='power' value='Shrani vsebino'/>
+	</form>
 </div>
 
 

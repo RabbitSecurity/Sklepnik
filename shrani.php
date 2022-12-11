@@ -212,10 +212,10 @@ if($a == "dogodek-info") {
 //nastavitve maila za delegate
 if($a == "dogodek-mail") {
 	
-	$zadeva = mysqli_real_escape_string($_POST['subject']);
-	$mail_html = mysqli_real_escape_string($_POST['mail_html']);
+	$zadeva = mysqli_real_escape_string($mysqli, $_POST['subject']);
+	$mail_html = mysqli_real_escape_string($mysqli, $_POST['mail_html']);
 	
-	mysqli_query($mysqli, "update sklepnik_dogodki set mail_zadeva = '$zadeva', mail_text = '$mail_html' where id = '$dogodek_id'");
+	mysqli_query($mysqli, "update sklepnik_dogodki set mail_zadeva = '$zadeva', mail_html = '$mail_html' where id = '$dogodek_id'");
 	
 	header("Location: admin.php");
 	die;

@@ -203,7 +203,7 @@ include("login.php");
 	Zadeva emaila: <input type='text' name='subject' value='<?php echo $dogodek_row->mail_zadeva; ?>'/><br/>
     <br>
 	Vsebina emaila (HTML):<br/>
-    <textarea name='content_html' style='width:500px;height:300px;'><?php echo $dogodek_row->mail_html; ?></textarea>
+    <textarea name='mail_html' style='width:500px;height:300px;'><?php echo $dogodek_row->mail_html; ?></textarea>
 	<br/>
 	<br/>
 	V vsebini je dovoljena uporaba HTML kode, nove vrstice (&lt;br/&gt;) bodo dodane avtomatsko.<br/>

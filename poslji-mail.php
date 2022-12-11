@@ -90,7 +90,7 @@ $tpl_replace = array(
 	'{delegat-obmocje-kratica}' => $user_row->obmocje_kratica,
 	'{delegat-povezava}' => Sklepnik_URL."registracija.php?u=".$u,
 	'{sklepnik-povezava}' => Sklepnik_URL."?dogodek=".$dogodek_row->access_key,
-	'{sklepnik-url}', Sklepnik_URL
+	'{sklepnik-url}' => Sklepnik_URL
 );
 
 foreach($tpl_replace as $search=>$replace) {
@@ -108,9 +108,6 @@ $phpMailer->msgHTML($mail_html, __DIR__);
 
 //Replace the plain text body with one created manually
 $phpMailer->AltBody = $mail_text;
- 
-echo $mail_text;
-die;
 
 //send the message, check for errors
 if (!$phpMailer->send()) {

@@ -210,6 +210,10 @@ if($a == "dogodek-info") {
 	
 }
 
+//nastavitve maila za delegate
+if($a == "dogodek-mail") {
+}
+
 //Staro
 //funkcije za masovni (masivni, whattever) test
 

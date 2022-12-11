@@ -1,3 +1,40 @@
+.w-100 {
+	width: 100%;
+}
+
+.flex {
+	display: flex;
+	flex-direction: column;
+}
+
+.flex.flex-row {
+	flex-direction: row;
+}
+
+.flex-grow {
+	flex-grow: 1;
+}
+
+.justify-between {
+	justify-content: space-between;
+}
+
+.text-small {
+	font-size: 0.8em;
+}
+
+.text-bold {
+	font-weight: bold;
+}
+
+.text-center {
+	text-align: center;
+}
+
+.height-minus-navbar {
+	min-height: calc(100vh - 3.25rem);
+}
+
 .is-primary {
 	color: #007cba;
 }

@@ -3,25 +3,25 @@ include("config.php");
 
 //Avtorizacija čez url ali čez HTTPS auth
 if(!empty($_GET['auth_key'])) {
-	$key = mysql_real_escape_string($_GET['auth_key']);
+	$key = mysqli_real_escape_string($mysqli, $_GET['auth_key']);
 	
-	$q = mysql_query("select * from sklepnik_dogodki where admin_pass_hash = '$key'");
-	if(mysql_num_rows($q) != 1) die("Authorization failed.");
+	$q = mysqli_query($mysqli, "select * from sklepnik_dogodki where admin_pass_hash = '$key'");
+	if(mysqli_num_rows($q) != 1) die("Authorization failed.");
 	
-	$dogodek_row = mysql_fetch_object($q);
+	$dogodek_row = mysqli_fetch_object($q);
 	$dogodek_id = $dogodek_row->id;
 }
 else include("login.php");
 
 //Je ključ uporabnika podan?
-$u = mysql_real_escape_string($_GET['u']);
+$u = mysqli_real_escape_string($mysqli, $_GET['u']);
 if(empty($u)) die("Neznan uporabnik #1.");
 
-$query = mysql_query("select * from sklepnik_delegati where login_key = '$u' and dogodek_id = '$dogodek_id'");
-if(mysql_num_rows($query) != 1) die("Neznan uporabnik #2.");
+$query = mysqli_query($mysqli, "select * from sklepnik_delegati where login_key = '$u' and dogodek_id = '$dogodek_id'");
+if(mysqli_num_rows($query) != 1) die("Neznan uporabnik #2.");
 	
 //očitno uporabnik obstaja...
-$user_row = mysql_fetch_object($query);
+$user_row = mysqli_fetch_object($query);
 
 
 

@@ -108,10 +108,10 @@ include("login.php");
 
     <?php
 
-    $query = mysql_query("select * from sklepnik_delegati where dogodek_id = '$dogodek_id' order by rod_kratica, ime, priimek");
+    $query = mysqli_query($mysqli, "select * from sklepnik_delegati where dogodek_id = '$dogodek_id' order by rod_kratica, ime, priimek");
 
     //Delegati so v bazi.
-    if (mysql_num_rows($query) > 0) {
+    if (mysqli_num_rows($query) > 0) {
 
         echo("<a href='#seznam-1' onClick='toggleSeznam(1);return false;'>+ Odpri seznam</a>");
 
@@ -128,7 +128,7 @@ include("login.php");
 	<table id='tabela-delegatov'>
 			<tr class='header'><td>Ime</td><td>Priimek</td><td>Email</td><td>Rod</td><td>Kratica</td><td>Območje</td><td>Kratica</td><td>Registriran</td><td colspan='3'>Orodja</td></tr>");
 
-        while ($row = mysql_fetch_object($query)) {
+        while ($row = mysqli_fetch_object($query)) {
             //Stolpci iz baze
             echo("<tr id='delegat-$row->id'><td>$row->ime</td><td>$row->priimek</td><td>$row->email</td><td>$row->rod</td><td>$row->rod_kratica</td><td>$row->obmocje</td><td>$row->obmocje_kratica</td>
 		<td align='center'>$row->registriran</td>");

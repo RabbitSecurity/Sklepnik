@@ -5,18 +5,18 @@ include("config.php");
 $time_start = microtime(true);
 
 //Pridobi informacije o dogodku
-$dogodek = mysql_real_escape_string($_GET['dogodek']);
+$dogodek = mysqli_real_escape_string($mysqli, $_GET['dogodek']);
 
-$query = mysql_query("select * from sklepnik_dogodki where access_key = '$dogodek' ");
+$query = mysqli_query($mysqli, "select * from sklepnik_dogodki where access_key = '$dogodek' ");
 
-if(mysql_num_rows($query) == 1) {
-	$dogodek_row = mysql_fetch_object($query);
+if(mysqli_num_rows($query) == 1) {
+	$dogodek_row = mysqli_fetch_object($query);
 	
 	//naredi seznam delegatov na dogodku (id=>ime, rod...);
 	//za kasnejšo uporabo
 	$delegati = array();
-	$query = mysql_query("select * from sklepnik_delegati where dogodek_id = '$dogodek_row->id' order by obmocje_kratica, rod_kratica, ime, priimek");
-	while($row = mysql_fetch_object($query)) {
+	$query = mysqli_query($mysqli, "select * from sklepnik_delegati where dogodek_id = '$dogodek_row->id' order by obmocje_kratica, rod_kratica, ime, priimek");
+	while($row = mysqli_fetch_object($query)) {
 		$delegati[$row->id] = $row;
 	}	
 }
@@ -45,15 +45,15 @@ else {
 <small>Seznam se ne osvežuje samodejno, za osvežitev <a href='#' onclick='location.reload();'>ponovno naloži stran</a>.</small>
 <div class="sklepi">
 <?php
-$query = mysql_query("select * from sklepnik_sklepi where dogodek_id = '$dogodek_row->id' order by time_end");
+$query = mysqli_query($mysqli, "select * from sklepnik_sklepi where dogodek_id = '$dogodek_row->id' order by time_end");
 
 $num = 1;
 $barve_glasov = array("#80ff80", "#ff9f80", "#ffd480"); //za, proti, vzdržan
 $glasovi_txt = array("ZA", "PROTI", "VZDRŽAN");
 
-if(mysql_num_rows($query) > 0) {
+if(mysqli_num_rows($query) > 0) {
 	
-	while($row = mysql_fetch_object($query)) {
+	while($row = mysqli_fetch_object($query)) {
 		
 		//besedilo sklepa
         echo("<div class='sklep'>");
@@ -73,8 +73,8 @@ if(mysql_num_rows($query) > 0) {
 		//seznam
 		$seznam = array();
 		
-		$q = mysql_query("select * from sklepnik_glasovi where sklep_id = '$row->id'");
-		while($r = mysql_fetch_object($q)) {
+		$q = mysqli_query($mysqli, "select * from sklepnik_glasovi where sklep_id = '$row->id'");
+		while($r = mysqli_fetch_object($q)) {
 			$glasovi[$r->odgovor]++;
 			$seznam[$r->delegat_id] = $r->odgovor;
 		}

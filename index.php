@@ -2,13 +2,13 @@
 include("config.php");
 
 //Prijava delegata oz. display dogodka
-$login_key = mysql_real_escape_string($_GET['u']);
+$login_key = mysqli_real_escape_string($mysqli, $_GET['u']);
 
 if(!empty($login_key)) {
-	$query = mysql_query("select * from sklepnik_delegati where login_key = '$login_key' ");
+	$query = mysqli_query($mysqli, "select * from sklepnik_delegati where login_key = '$login_key' ");
 
-	if (mysql_num_rows($query) == 1) {
-		$user_row = mysql_fetch_object($query);
+	if (mysqli_num_rows($query) == 1) {
+		$user_row = mysqli_fetch_object($query);
         $uporabnik_id = $user_row->id;
 
 		$uporabnik = $user_row->ime . " " . $user_row->priimek . ", " . $user_row->rod . " (" . $user_row->obmocje_kratica . ")";
@@ -19,20 +19,20 @@ if(!empty($login_key)) {
 	//Informacije o dogodku
 	$passive_user = false;
 	
-	$query = mysql_query("select * from sklepnik_dogodki where id = '$user_row->dogodek_id'");
-	$dogodek = mysql_fetch_object($query);
+	$query = mysqli_query($mysqli, "select * from sklepnik_dogodki where id = '$user_row->dogodek_id'");
+	$dogodek = mysqli_fetch_object($query);
 	$dogodek_naslov = $dogodek->ime;
 }
 //Pasivni uporabnik ki samo spremlja?
 else {
-	$dogodek_key = mysql_real_escape_string($_GET['dogodek']);
+	$dogodek_key = mysqli_real_escape_string($mysqli, $_GET['dogodek']);
 	
 	if(!empty($dogodek_key)) {
-		$query = mysql_query("select * from sklepnik_dogodki where access_key = '$dogodek_key' ");
+		$query = mysqli_query($mysqli, "select * from sklepnik_dogodki where access_key = '$dogodek_key' ");
 		
 		//Našli smo dogodek.
-		if (mysql_num_rows($query) == 1) {
-			$dogodek = mysql_fetch_object($query);
+		if (mysqli_num_rows($query) == 1) {
+			$dogodek = mysqli_fetch_object($query);
 			
 			$passive_user = true;
 		} else {
@@ -157,9 +157,9 @@ else {
 
     //seznam delegatov (da je manj podatkov ob pinganju)
     <?php
-    $query = mysql_query("select * from sklepnik_delegati where dogodek_id = '$user_row->dogodek_id'");
+    $query = mysqli_query($mysqli, "select * from sklepnik_delegati where dogodek_id = '$user_row->dogodek_id'");
     $delegati = array();
-    while ($user_row = mysql_fetch_object($query)) {
+    while ($user_row = mysqli_fetch_object($query)) {
         $delegati[$user_row->id] = array_map('htmlspecialchars', array(
             "$user_row->ime $user_row->priimek",
             $user_row->rod_kratica,

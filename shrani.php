@@ -38,15 +38,15 @@ if($a == "koncaj-uvoz") {
 	
 		//Magic happens v grdi kodi
 			
-		$ime = mysql_real_escape_string($col[0]);
-		$priimek = mysql_real_escape_string($col[1]);
-		$email = mysql_real_escape_string($col[2]);
-		$funkcija = mysql_real_escape_string($col[3]);
+		$ime = mysqli_real_escape_string($mysqli, $col[0]);
+		$priimek = mysqli_real_escape_string($mysqli, $col[1]);
+		$email = mysqli_real_escape_string($mysqli, $col[2]);
+		$funkcija = mysqli_real_escape_string($mysqli, $col[3]);
 		
-		$rod = mysql_real_escape_string($col[4]);
-		$rod_kratica = mysql_real_escape_string($col[5]);
-		$obmocje = mysql_real_escape_string($col[6]);
-		$obmocje_kratica = mysql_real_escape_string($col[7]);
+		$rod = mysqli_real_escape_string($mysqli, $col[4]);
+		$rod_kratica = mysqli_real_escape_string($mysqli, $col[5]);
+		$obmocje = mysqli_real_escape_string($mysqli, $col[6]);
+		$obmocje_kratica = mysqli_real_escape_string($mysqli, $col[7]);
 		
 		$login_key = randomString(50);
 		$vote_key = randomString(50);
@@ -54,7 +54,7 @@ if($a == "koncaj-uvoz") {
 		// ?preveri, da so stringi res unique? (mislm, sej, verjetnost je skoraj 0 oz. 1:10^80...)
 		
 		//in ga daj v bazo...
-		mysql_query("insert into sklepnik_delegati (ime, priimek, email, rod, rod_kratica, obmocje, obmocje_kratica, funkcija, dogodek_id, registriran, login_key, vote_key) values ('$ime', '$priimek', '$email', '$rod', '$rod_kratica', '$obmocje', '$obmocje_kratica', '$funkcija', '$dogodek_id', 'ne', '$login_key', '$vote_key')");
+		mysqli_query($mysqli, "insert into sklepnik_delegati (ime, priimek, email, rod, rod_kratica, obmocje, obmocje_kratica, funkcija, dogodek_id, registriran, login_key, vote_key) values ('$ime', '$priimek', '$email', '$rod', '$rod_kratica', '$obmocje', '$obmocje_kratica', '$funkcija', '$dogodek_id', 'ne', '$login_key', '$vote_key')");
 		
 		//Pošlji mail čez proxy (max 5 na sekundo, zato usleep)
 		//Proxy uporabljam zato, da nimam še kle not vse mail kode
@@ -92,13 +92,13 @@ if($a == "uredi-delegate") {
 		
 		$named = array();
 		foreach($columns as $col => $value) {
-			$cols[] = $names[$col]." = '".mysql_real_escape_string($value)."'";
+			$cols[] = $names[$col]." = '".mysqli_real_escape_string($mysqli, $value)."'";
 			$named[$names[$col]] = $value;
 		}
 		
 		//V query stlači še dogodek_id
 		//tako ne more nekdo urejat delegatov drugih dogodkov, ki jim ni admin
-		mysql_query("update sklepnik_delegati set ".implode(", ", $cols)." where id = '$id' and dogodek_id = '$dogodek_id'\n");
+		mysqli_query($mysqli, "update sklepnik_delegati set ".implode(", ", $cols)." where id = '$id' and dogodek_id = '$dogodek_id'\n");
 	}
 	header("Location: admin.php");
 }
@@ -108,7 +108,7 @@ if($a == "brisi-delegata") {
 	$id = (int)$_POST['id'];
 	
 	//ponovno stlačmo not $dogodek_id
-	mysql_query("delete from sklepnik_delegati where id='$id' and dogodek_id = '$dogodek_id' ");
+	mysqli_query($mysqli, "delete from sklepnik_delegati where id='$id' and dogodek_id = '$dogodek_id' ");
 	
 	//tako brisanje ne zbriše odgovorov, ki jih je uporabnik že podal.
 	//ker pričakujemo brisanje predvsem pred dogodkom, recimo da to (še) ne bo problem
@@ -121,8 +121,8 @@ if($a == "brisi-delegata") {
 
 //Postavi sklep
 if($a == "postavi-sklep") {
-	$vprasanje = mysql_real_escape_string($_POST['vprasanje']);
-	$opomba = mysql_real_escape_string($_POST['pojasnilo']);
+	$vprasanje = mysqli_real_escape_string($mysqli, $_POST['vprasanje']);
+	$opomba = mysqli_real_escape_string($mysqli, $_POST['pojasnilo']);
 	
 	//Čas računaj v minutah
 	$cas = (float)$_POST['cas'];
@@ -133,18 +133,18 @@ if($a == "postavi-sklep") {
 	//vnesi sklep s prihodnjim časom aka shekan lock sklepa
 	//da se ne zgodi podvajanje vnosov, vnesi najprej prihodnji čas, da se vmes izvedejo insert queriji
 	//preden sklep vidijo tudi delegati
-	mysql_query("insert into sklepnik_sklepi (vprasanje, pojasnilo, dogodek_id, time_start, time_end) values ('$vprasanje', '$opomba', '$dogodek_id', '$time_start', '$time_end')");
+	mysqli_query($mysqli, "insert into sklepnik_sklepi (vprasanje, pojasnilo, dogodek_id, time_start, time_end) values ('$vprasanje', '$opomba', '$dogodek_id', '$time_start', '$time_end')");
 	
 	//id novo vnešenega sklepa
-	$sklep_id = mysql_insert_id();
+	$sklep_id = mysqli_insert_id();
 	
 	//vnesi vsem prisotnim (ping < 60s nazaj) prazen odgovor.
 	$this_time = time();
-	$query = mysql_query("select * from sklepnik_delegati where dogodek_id = '$dogodek_id' order by rod_kratica, ime, priimek");
+	$query = mysqli_query($mysqli, "select * from sklepnik_delegati where dogodek_id = '$dogodek_id' order by rod_kratica, ime, priimek");
 	
 	$queries = array();
 	$delegati = array();
-	while($row = mysql_fetch_object($query)) {
+	while($row = mysqli_fetch_object($query)) {
 		
 		//prikaži samo aktivne oz. če so oddali glas
 		if($this_time - strtotime($row->zadnji_ping) < 60) {
@@ -156,14 +156,14 @@ if($a == "postavi-sklep") {
 	//izvrši veliki inset query z vsemi vrednostmi
 	//in update query za vse upoštevane delegate
 	if(count($queries) > 0) {
-		mysql_query("insert into sklepnik_glasovi (delegat_id, sklep_id, odgovor) values ".implode(", ", $queries));
+		mysqli_query($mysqli, "insert into sklepnik_glasovi (delegat_id, sklep_id, odgovor) values ".implode(", ", $queries));
 		
-		mysql_query("update sklepnik_delegati set last_sklep_id = '$sklep_id' where id in (".implode(",", $delegati).")");
+		mysqli_query($mysqli, "update sklepnik_delegati set last_sklep_id = '$sklep_id' where id in (".implode(",", $delegati).")");
 	}
 	
 	//popravi čas sklepa na takoj zdaj (unlock sklep)
 	$time_start = date('Y-m-d H:i:s', time());
-	mysql_query("update sklepnik_sklepi set time_start = '$time_start' where id = '$sklep_id'");
+	mysqli_query($mysqli, "update sklepnik_sklepi set time_start = '$time_start' where id = '$sklep_id'");
 
 	
 	header("Location: admin.php");
@@ -172,12 +172,12 @@ if($a == "postavi-sklep") {
 //Umakni zadnji sklep
 if($a == "umakni-sklep") {
 	
-	$query = mysql_query("select * from sklepnik_sklepi where dogodek_id = '$dogodek_id' order by time_end desc limit 1");
-	$row = mysql_fetch_object($query);
+	$query = mysqli_query($mysqli, "select * from sklepnik_sklepi where dogodek_id = '$dogodek_id' order by time_end desc limit 1");
+	$row = mysqli_fetch_object($query);
 	
 	//nastavi mu čas zaključka na zdajšnji čas.
 	$time_end = date('Y-m-d H:i:s', time());
-	mysql_query("update sklepnik_sklepi set time_end = '$time_end' where id = '$row->id'");
+	mysqli_query($mysqli, "update sklepnik_sklepi set time_end = '$time_end' where id = '$row->id'");
 	
 	header("Location: admin.php");
 }
@@ -196,15 +196,15 @@ if($a == "dogodek-info") {
 	//kateri stolpci so ok in jih poberi iz $_POST
 	$stolpci = array('ime', 'time_start', 'time_end', 'sklepcnost_min_delegatov', 'sklepcnost_min_rodov', 'sklepcnost_min_obmocji');
 	
-	//naredi mysql_query
+	//naredi mysqli_query
 	$data = array();
 	foreach($stolpci as $stolpec) {
-		$data[$stolpec] = $stolpec." = '".mysql_real_escape_string($_POST[$stolpec])."'";
+		$data[$stolpec] = $stolpec." = '".mysqli_real_escape_string($mysqli, $_POST[$stolpec])."'";
 	}
 	
 	//Zapiši v bazo...
 	$update_stolpci = implode(", ", $data);
-	mysql_query("update sklepnik_dogodki set ".$update_stolpci." where id = '$dogodek_id'");
+	mysqli_query($mysqli, "update sklepnik_dogodki set ".$update_stolpci." where id = '$dogodek_id'");
 	
 	header("Location: admin.php");
 	
@@ -217,9 +217,9 @@ if($a == "dogodek-info") {
 if($a == "masivni-test" && date('Y-m-d') == "2021-02-15") {
 	$dogodek_id = 2;
 	
-	$ime = mysql_real_escape_string($_POST['ime']);
-	$priimek = mysql_real_escape_string($_POST['priimek']);
-	$rod_kratica = mysql_real_escape_string($_POST['rod']);
+	$ime = mysqli_real_escape_string($mysqli, $_POST['ime']);
+	$priimek = mysqli_real_escape_string($mysqli, $_POST['priimek']);
+	$rod_kratica = mysqli_real_escape_string($mysqli, $_POST['rod']);
 	
 	if(!empty($ime) && !empty($priimek) && !empty($rod_kratica)) {
 		$rod = "Testni rodek";
@@ -229,7 +229,7 @@ if($a == "masivni-test" && date('Y-m-d') == "2021-02-15") {
 		$vote_key = sha1(time().openssl_random_pseudo_bytes(32).$ime.$priimek);
 		
 		//in ga daj v bazo...
-		mysql_query("insert into sklepnik_delegati (ime, priimek, rod, rod_kratica, obmocje, obmocje_test, funkcija, dogodek_id, registriran, login_key, vote_key) values ('$ime', '$priimek', '$rod', '$rod_kratica', 'MZT', 'Mestna Zveza Tabornikov', '$funkcija', '$dogodek_id', 'ne', '$login_key', '$vote_key')");
+		mysqli_query($mysqli, "insert into sklepnik_delegati (ime, priimek, rod, rod_kratica, obmocje, obmocje_test, funkcija, dogodek_id, registriran, login_key, vote_key) values ('$ime', '$priimek', '$rod', '$rod_kratica', 'MZT', 'Mestna Zveza Tabornikov', '$funkcija', '$dogodek_id', 'ne', '$login_key', '$vote_key')");
 	}
 	else {
 		echo("Nisi vpisal vsega??");
@@ -239,8 +239,8 @@ if($a == "masivni-test" && date('Y-m-d') == "2021-02-15") {
 }
 
 if($a == "masivni-test-sklep") {
-	$vprasanje = mysql_real_escape_string($_POST['vprasanje']);
-	$opomba = mysql_real_escape_string($_POST['pojasnilo']);
+	$vprasanje = mysqli_real_escape_string($mysqli, $_POST['vprasanje']);
+	$opomba = mysqli_real_escape_string($mysqli, $_POST['pojasnilo']);
 	$cas = (float)$_POST['cas'];
 	
 	$dogodek_id = 2;
@@ -248,7 +248,7 @@ if($a == "masivni-test-sklep") {
 	$time_start = date('Y-m-d H:i:s', time());
 	$time_end = date('Y-m-d H:i:s', time() + $cas*60);
 	
-	mysql_query("insert into sklepnik_sklepi (vprasanje, pojasnilo, dogodek_id, time_start, time_end) values ('$vprasanje', '$opomba', '$dogodek_id', '$time_start', '$time_end')");
+	mysqli_query($mysqli, "insert into sklepnik_sklepi (vprasanje, pojasnilo, dogodek_id, time_start, time_end) values ('$vprasanje', '$opomba', '$dogodek_id', '$time_start', '$time_end')");
 	
 	header("Location: ./admin.php");
 }

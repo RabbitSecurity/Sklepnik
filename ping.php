@@ -4,7 +4,7 @@ include("config.php");
 $a = $_GET['a'];
 
 //Je login ključ podan?
-$u = mysql_real_escape_string($_GET['u']);
+$u = mysqli_real_escape_string($mysqli, $_GET['u']);
 if(empty($u)) die("false\nfalse\nNeznan vstopni ključ.");
 
 
@@ -12,11 +12,11 @@ if(empty($u)) die("false\nfalse\nNeznan vstopni ključ.");
 //če je uporabnik pasiven (ne more glasovat), se njegov "u" začne s ! in pomeni access_key dogodka
 if($u[0] != "!") {
 	$pasiven_uporabnik = false;
-	$query = mysql_query("select * from sklepnik_delegati where login_key = '$u'");
-	if(mysql_num_rows($query) != 1) die("false\nfalse\nNeveljaven vstopni ključ?");
+	$query = mysqli_query($mysqli, "select * from sklepnik_delegati where login_key = '$u'");
+	if(mysqli_num_rows($query) != 1) die("false\nfalse\nNeveljaven vstopni ključ?");
 	
 	//očitno uporabnik obstaja...
-	$user_row = mysql_fetch_object($query);
+	$user_row = mysqli_fetch_object($query);
 	$dogodek_id = $user_row->dogodek_id;
 }
 //samo nekdo spremlja volitve v živo...
@@ -28,11 +28,11 @@ else {
 	//preveri, če dogodek obstaja
 	$dogodek_key = substr($u, 1, strlen($u)-1);
 	
-	$query = mysql_query("select * from sklepnik_dogodki where access_key = '$dogodek_key'");
-	if(mysql_num_rows($query) != 1) die("false\nfalse\nNeveljaven id dogodka?");
+	$query = mysqli_query($mysqli, "select * from sklepnik_dogodki where access_key = '$dogodek_key'");
+	if(mysqli_num_rows($query) != 1) die("false\nfalse\nNeveljaven id dogodka?");
 	
 	//če ja, ga zabeleži za naprej.
-	$dogodek_row = mysql_fetch_object($query);
+	$dogodek_row = mysqli_fetch_object($query);
 	$dogodek_id = $dogodek_row->id;
 }
 
@@ -50,11 +50,11 @@ if($a == "ping") {
 	//kateri dogodek je to vemo iz user_row->dogodek_id
 
 	//id naslednjega/aktivnega sklepa:
-	$query = mysql_query("select * from sklepnik_sklepi where dogodek_id = '$dogodek_id' and time_start < NOW() order by time_end desc limit 1");
+	$query = mysqli_query($mysqli, "select * from sklepnik_sklepi where dogodek_id = '$dogodek_id' and time_start < NOW() order by time_end desc limit 1");
 
 	$aktiven_sklep = -1;
-	if(mysql_num_rows($query) > 0) {
-		$row = mysql_fetch_object($query);
+	if(mysqli_num_rows($query) > 0) {
+		$row = mysqli_fetch_object($query);
 
 		//prikaži sklep samo, če je še aktiven
 		if(strtotime($row->time_end) > time()) {
@@ -81,14 +81,14 @@ if($a == "ping") {
 			$zadnji_sklep_sql = ", last_sklep_id = '$aktiven_sklep' ";
 			
 			//vnesi prazen glas v tabelo odgovorov
-			mysql_query("insert into sklepnik_glasovi (delegat_id, sklep_id, odgovor) values ('$user_row->id', '$aktiven_sklep', '0')");
+			mysqli_query($mysqli, "insert into sklepnik_glasovi (delegat_id, sklep_id, odgovor) values ('$user_row->id', '$aktiven_sklep', '0')");
 		}
 	
 		if($aktiven == "da") {
-			mysql_query("update sklepnik_delegati set zadnji_ping = '$now', zadnjic_aktiven = '$now' $zadnji_sklep_sql where id = '$user_row->id'");
+			mysqli_query($mysqli, "update sklepnik_delegati set zadnji_ping = '$now', zadnjic_aktiven = '$now' $zadnji_sklep_sql where id = '$user_row->id'");
 		}
 		else {
-			mysql_query("update sklepnik_delegati set zadnji_ping = '$now' $zadnji_sklep_sql where id = '$user_row->id'");
+			mysqli_query($mysqli, "update sklepnik_delegati set zadnji_ping = '$now' $zadnji_sklep_sql where id = '$user_row->id'");
 		}
 	}
 	
@@ -96,15 +96,15 @@ if($a == "ping") {
 	//če je sklep aktiven, pokaži tudi rezultate glasovanja
 	$oddani_glasovi = array();
 	if($aktiven_sklep > 0) {
-		$query = mysql_query("select * from sklepnik_glasovi where sklep_id = '$aktiven_sklep'");
-		while($row = mysql_fetch_object($query)) {
+		$query = mysqli_query($mysqli, "select * from sklepnik_glasovi where sklep_id = '$aktiven_sklep'");
+		while($row = mysqli_fetch_object($query)) {
 			$oddani_glasovi[$row->delegat_id] = $row->odgovor;
 		}
 	}
 	
 	//seznam aktivnih delegatov/glasovalcev:
 	$this_time = time();
-	$query = mysql_query("select * from sklepnik_delegati where dogodek_id = '$dogodek_id' order by rod_kratica, ime, priimek");
+	$query = mysqli_query($mysqli, "select * from sklepnik_delegati where dogodek_id = '$dogodek_id' order by rod_kratica, ime, priimek");
 	
 	$aktivni = array();
 	
@@ -112,7 +112,7 @@ if($a == "ping") {
 	//$rodovi = array();
 	//$obmocja = array();
 	
-	while($row = mysql_fetch_object($query)) {
+	while($row = mysqli_fetch_object($query)) {
 		
 		//prikaži uporabnikov zadnji glas, če obstaja
 		if($aktiven_sklep > 0) {
@@ -144,16 +144,16 @@ if($a == "ping") {
 }
 
 if($a == "naslednji-sklep") {
-	$u = mysql_real_escape_string($_GET['u']);
+	$u = mysqli_real_escape_string($mysqli, $_GET['u']);
 	
 	//kateri dogodek je to že vemo.
 	echo("ok\n");
 	
 	//za vsak slučaj select čez več sklepov, morda jih je več aktivnih po urah.
 	//v vsakem primeru izberi samo zadnjega (break v while)
-	$query = mysql_query("select * from sklepnik_sklepi where dogodek_id = '$dogodek_id' and time_start < NOW() order by time_end desc limit 10");
+	$query = mysqli_query($mysqli, "select * from sklepnik_sklepi where dogodek_id = '$dogodek_id' and time_start < NOW() order by time_end desc limit 10");
 	
-	while($row = mysql_fetch_object($query)) {
+	while($row = mysqli_fetch_object($query)) {
 	
 		//prikaži sklep samo, če je še aktiven
 		$now = time();
@@ -194,10 +194,10 @@ if($a == "naslednji-sklep") {
 
 //vrni seznam delegatov (enako kot v index.php)
 if($a == "delegati") {
-	$query = mysql_query("select * from sklepnik_delegati where dogodek_id = '$dogodek_id'");
+	$query = mysqli_query($mysqli, "select * from sklepnik_delegati where dogodek_id = '$dogodek_id'");
 
 	$delegati = array();
-	while($row = mysql_fetch_object($query)) {
+	while($row = mysqli_fetch_object($query)) {
 		$delegati[$row->id] = array_map('htmlspecialchars', array(
 			"$row->ime $row->priimek",
 			$row->rod_kratica,

@@ -206,14 +206,15 @@ include("login.php");
     <textarea name='content_html' style='width:500px;height:300px;'><?php echo $dogodek_row->mail_html; ?></textarea>
 	<br/>
 	<br/>
-	V besedilu lahko uporabiš ključne besede, ki bodo zamenjane s podatki delegata, kateremu se mail pošilja:<br/>
-	{delegat-link}, {delegat-ime}, {delegat-priimek}, {delegat-rod}, {delegat-rod-kratica}, {delegat-obmocje}, {delegat-obmocje-kratica}, {sklepnik-url}.
+	V vsebini je dovoljena uporaba HTML kode, nove vrstice (&lt;br/&gt;) bodo dodane avtomatsko.<br/>
+	<br/>
+	V besedilu (in zadevi) lahko uporabiš ključne besede, ki bodo zamenjane s podatki delegata, kateremu se mail pošilja:<br/>
+	{delegat-link}, {delegat-ime}, {delegat-priimek}, {delegat-rod}, {delegat-rod-kratica}, {delegat-obmocje}, {delegat-obmocje-kratica}.<br/>
+	<br/>
+	Za naslove povezav uporabi: {delegat-povezava} (personalizirana za vsakega delegata} in {sklepnik-povezava} za tiste ki lahko glasovanje le spremljajo, nimajo pa glasovalne pravice.
 	<br/>
 	<br/>
-	V vsebini je dovoljena uporaba HTML kode, nove vrstice (&lt;br/&gt;) bodo dodane avtomatsko.
-	
-	<br/>
-	<br/>
+
 	<input type='submit' name='power' value='Shrani vsebino'/>
 	</form>
 </div>

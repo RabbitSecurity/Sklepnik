@@ -88,6 +88,8 @@ $tpl_replace = array(
 	'{delegat-rod-kratica}' => $user_row->rod_kratica,
 	'{delegat-obmocje}' => $user_row->obmocje,
 	'{delegat-obmocje-kratica}' => $user_row->obmocje_kratica,
+	'{delegat-povezava}' => Sklepnik_URL."registracija.php?u=".$u,
+	'{sklepnik-povezava}' => Sklepnik_URL."?dogodek=".$dogodek_row->access_key,
 	'{sklepnik-url}', Sklepnik_URL
 );
 

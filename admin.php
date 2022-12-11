@@ -207,7 +207,7 @@ include("login.php");
 	<br/>
 	<br/>
 	V besedilu lahko uporabiš ključne besede, ki bodo zamenjane s podatki delegata, kateremu se mail pošilja:<br/>
-	{delegat-link}, {delegat-ime}, {delegat-priimek}, {delegat-rod}, {delegat-rod-kratica}, {delegat-obmocje}, {delegat-obmocje-kratica}.
+	{delegat-link}, {delegat-ime}, {delegat-priimek}, {delegat-rod}, {delegat-rod-kratica}, {delegat-obmocje}, {delegat-obmocje-kratica}, {sklepnik-url}.
 	<br/>
 	<br/>
 	V vsebini je dovoljena uporaba HTML kode, nove vrstice (&lt;br/&gt;) bodo dodane avtomatsko.

@@ -88,6 +88,7 @@ $tpl_replace = array(
 	'{delegat-rod-kratica}' => $user_row->rod_kratica,
 	'{delegat-obmocje}' => $user_row->obmocje,
 	'{delegat-obmocje-kratica}' => $user_row->obmocje_kratica,
+	'{sklepnik-url}', Sklepnik_URL
 );
 
 foreach($tpl_replace as $search=>$replace) {

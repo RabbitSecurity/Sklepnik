@@ -19,6 +19,8 @@ define("Sklepnik_SMTP_Encryption", 'starttls');
 define('Sklepnik_SMTP_Username', '**************');
 define('Sklepnik_SMTP_Password', '**************');
 
+//Super kurac
+
 define('stencas_password', '**************');
 
 //Generiranje tokenov (naj ostane skrivnost)

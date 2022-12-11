@@ -21,7 +21,6 @@ if(!empty($login_key)) {
 	
 	$query = mysqli_query($mysqli, "select * from sklepnik_dogodki where id = '$user_row->dogodek_id'");
 	$dogodek = mysqli_fetch_object($query);
-	$dogodek_naslov = $dogodek->ime;
 }
 //Pasivni uporabnik ki samo spremlja?
 else {

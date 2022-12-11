@@ -17,7 +17,7 @@
 <nav class="navbar is-fixed-top is-primary has-background-primary" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
         <a class="navbar-item">
-            <b><?php echo $dogodek_naslov; ?></b>
+            <b><?php echo $dogodek->ime; ?></b>
         </a>
         <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
             <span aria-hidden="true"></span>
@@ -34,7 +34,7 @@
 				echo("Delegat: $uporabnik");
 			}
 			else {
-				echo("$dogodek->ime v živo");
+				echo("Javni pogled");
 			}
 			?>
 			</span>

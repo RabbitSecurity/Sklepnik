@@ -15,7 +15,7 @@ include("login.php");
     <link rel='stylesheet' href='admin.css?<?php echo filemtime("admin.css"); ?>'/>
 
     <script type="text/javascript" src="js/funkcije.js"></script>
-    <script type="text/javascript" src="js/admin.js"></script>
+    <script type="text/javascript" src="js/admin.js?<?php echo filemtime("js/admin.js"); ?>"></script>
 </head>
 <body>
 
@@ -109,9 +109,10 @@ include("login.php");
     <?php
 
     $query = mysqli_query($mysqli, "select * from sklepnik_delegati where dogodek_id = '$dogodek_id' order by rod_kratica, ime, priimek");
-
+    
+    $st_delegatov = mysqli_num_rows($query);
     //Delegati so v bazi.
-    if (mysqli_num_rows($query) > 0) {
+    if ($st_delegatov > 0) {
 
         echo("<a href='#seznam-1' onClick='toggleSeznam(1);return false;'>+ Odpri seznam</a>");
 
@@ -129,8 +130,13 @@ include("login.php");
 			<tr class='header'><td>Ime</td><td>Priimek</td><td>Email</td><td>Rod</td><td>Kratica</td><td>Območje</td><td>Kratica</td><td>Registriran</td><td colspan='3'>Orodja</td></tr>");
 
         while ($row = mysqli_fetch_object($query)) {
+            
+            //označi da je registriran
+            $style = '';
+            if($row->registriran == 'da') $style = " style='background-color:#ccffcc;'";
+            
             //Stolpci iz baze
-            echo("<tr id='delegat-$row->id'><td>$row->ime</td><td>$row->priimek</td><td>$row->email</td><td>$row->rod</td><td>$row->rod_kratica</td><td>$row->obmocje</td><td>$row->obmocje_kratica</td>
+            echo("<tr id='delegat-$row->id'$style><td>$row->ime</td><td>$row->priimek</td><td>$row->email</td><td>$row->rod</td><td>$row->rod_kratica</td><td>$row->obmocje</td><td>$row->obmocje_kratica</td>
 		<td align='center'>$row->registriran</td>");
 
             //In potem kontrolni gumbi...
@@ -154,7 +160,7 @@ include("login.php");
 	</form>
 	");
 
-        echo("</div>");
+        echo("<br/>Skupno <b>$st_delegatov</b> delegatov.</div>");
     } else {
         echo("Ni vnešenih delegatov.");
     }
@@ -190,6 +196,11 @@ include("login.php");
 		
 		<br/><br/>
 		Opomba: uvoz podatkov <u>ohrani dosedanje podatke</u>, zato uvoz dopolnjene datoteke lahko povzroči podvajanje.
+		
+		<br/><br/>
+		<input type='button' value='Zahtevaj osvežitev strani' onclick='forceReload();'/>
+		<br/>
+		Samo za primer osvežitve podatkov, sicer naj se uporabi čim manjkrat. Traja vsaj nekih 15 sekund, bodi potrpežljiv.
     </form>
 	
     <br/><br/>
@@ -217,6 +228,11 @@ include("login.php");
 
 	<input type='submit' name='power' value='Shrani vsebino'/>
 	</form>
+	
+    <br/><br/>
+    <h2>Pošlji testni e-mail</h2>
+	<br/>
+	<input id='testni-email' type='text' placeholder='Vpiši email'>	<input type='submit' name='power' value='Pošlji email' onClick='testniMail();' id='test-mail-button'/> <span id='test-email-info'></span>
 </div>
 
 

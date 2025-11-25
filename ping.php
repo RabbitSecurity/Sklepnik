@@ -140,7 +140,8 @@ if($a == "ping") {
 	
 	//pošlji v zadnji vrstici še morebiten JS ukaz
 	// 0 = nič, r = reload...
-	echo("0");
+	//echo("0");
+	echo file_get_contents("beacon-of-gondor.txt");
 }
 
 if($a == "naslednji-sklep") {

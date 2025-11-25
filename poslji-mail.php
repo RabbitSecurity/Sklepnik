@@ -14,14 +14,38 @@ if(!empty($_GET['auth_key'])) {
 else include("login.php");
 
 //Je ključ uporabnika podan?
-$u = mysqli_real_escape_string($mysqli, $_GET['u']);
-if(empty($u)) die("Neznan uporabnik #1.");
+$a = $_GET['a'];
 
-$query = mysqli_query($mysqli, "select * from sklepnik_delegati where login_key = '$u' and dogodek_id = '$dogodek_id'");
-if(mysqli_num_rows($query) != 1) die("Neznan uporabnik #2.");
+//testni mail
+if(!empty($a) && $a == "testni-mail") {
 	
-//očitno uporabnik obstaja...
-$user_row = mysqli_fetch_object($query);
+	
+	//Nastavi "testne podatke"
+	$testni_podatki = array(
+		'email' => $_GET['email'],
+		'ime' => 'Test',
+		'priimek' => 'Testnjakovič',
+		'rod' => 'Testni ROD',
+		'rod_kratica' => 'TRD',
+		'obmocje' => 'Testno območje',
+		'obmocje_kratica' => 'TO'
+	);
+	
+	$user_row = (object)$testni_podatki;
+	
+	$u = "1234567890abcdefghijklmnopqrstuvxywz!";
+}
+//pošiljanje maila dejanskemu delegatu
+else {
+	$u = mysqli_real_escape_string($mysqli, $_GET['u']);
+	if(empty($u)) die("Neznan uporabnik #1.");
+
+	$query = mysqli_query($mysqli, "select * from sklepnik_delegati where login_key = '$u' and dogodek_id = '$dogodek_id'");
+	if(mysqli_num_rows($query) != 1) die("Neznan uporabnik #2.");
+		
+	//očitno uporabnik obstaja...
+	$user_row = mysqli_fetch_object($query);
+}
 
 //Import knjižnice
 use PHPMailer\PHPMailer\PHPMailer;
@@ -74,7 +98,9 @@ $phpMailer->addAddress($user_row->email);
 
 //Vsebina maila in zadeva
 $mail_subject = $dogodek_row->mail_zadeva;
-$mail_html = $dogodek_row->mail_html;
+
+//pri htmlju dodaj tudi nove vrstice
+$mail_html = nl2br($dogodek_row->mail_html);
 
 //tekstovna oblika (če je na voljo, sicer generiraj avtomatsko iz HTML)
 $mail_text = $dogodek_row->mail_text;
@@ -118,5 +144,5 @@ if (!$phpMailer->send()) {
     echo("ok");
 	
 	//Zabeleži poslano
-	//file_put_contents("sent-log.txt", date('Y-m-d H:i:s')."\t".$data['mail_to']."\n", FILE_APPEND);
+	file_put_contents("sent-log.txt", date('Y-m-d H:i:s')."\t".$data['mail_to']."\n", FILE_APPEND);
 }

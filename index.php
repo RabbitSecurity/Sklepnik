@@ -12,6 +12,11 @@ if(!empty($login_key)) {
         $uporabnik_id = $user_row->id;
 
 		$uporabnik = $user_row->ime . " " . $user_row->priimek . ", " . $user_row->rod . " (" . $user_row->obmocje_kratica . ")";
+		
+		//označi da je registriran, če še ni označen
+		if($user_row->registriran == 'ne') {
+		    mysqli_query($mysqli, "update sklepnik_delegati set registriran = 'da' where login_key = '$login_key' ");
+		}
 	} else {
 		die("Neveljavno vstopno geslo!");
 	}

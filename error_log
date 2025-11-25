@@ -1,0 +1,5 @@
+[11-Dec-2022 17:41:42 Europe/Ljubljana] PHP Warning:  include(config.php): failed to open stream: No such file or directory in /home/rimskace/bostjan.info/sklepnik-test/admin.php on line 2
+[11-Dec-2022 17:41:42 Europe/Ljubljana] PHP Warning:  include(config.php): failed to open stream: No such file or directory in /home/rimskace/bostjan.info/sklepnik-test/admin.php on line 2
+[11-Dec-2022 17:41:42 Europe/Ljubljana] PHP Warning:  include(): Failed opening 'config.php' for inclusion (include_path='.:/opt/alt/php56/usr/share/pear:/opt/alt/php56/usr/share/php') in /home/rimskace/bostjan.info/sklepnik-test/admin.php on line 2
+[11-Dec-2022 17:41:42 Europe/Ljubljana] PHP Warning:  mysqli_real_escape_string() expects parameter 1 to be mysqli, null given in /home/rimskace/bostjan.info/sklepnik-test/login.php on line 5
+[11-Dec-2022 17:41:42 Europe/Ljubljana] PHP Fatal error:  Call to undefined function passwordHash() in /home/rimskace/bostjan.info/sklepnik-test/login.php on line 6

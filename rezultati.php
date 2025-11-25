@@ -70,7 +70,7 @@ else {
     <div id="content">
 
         <?php
-        $query = mysqli_query($mysqli, "select * from sklepnik_sklepi where dogodek_id = '$dogodek->id' order by time_end");
+        $query = mysqli_query($mysqli, "select * from sklepnik_sklepi where dogodek_id = '$dogodek->id' order by time_end desc");
 
         $num = 0;
         $barve_glasov = array("#80ff80", "#ff9f80", "#ffd480"); //za, proti, vzdržan
@@ -106,7 +106,7 @@ else {
                 $pct1 = round($glasovi[1]/$prisotnih*100, 1);
                 $pct2 = round($glasovi[2]/$prisotnih*100, 1);
                 $pct3 = round($glasovi[3]/$prisotnih*100, 1);
-
+/*
                 if($pct1 > 50) {
                     $izid = 'SPREJET';
                     $izid_class = $glasovi_class[1];
@@ -115,6 +115,7 @@ else {
                     $izid = 'ZAVRNJEN';
                     $izid_class = $glasovi_class[2];
                 }
+                */
 
 
                 echo("

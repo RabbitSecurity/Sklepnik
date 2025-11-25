@@ -60,8 +60,8 @@ if($a == "koncaj-uvoz") {
 		//Proxy uporabljam zato, da nimam še kle not vse mail kode
 		//Realno za velik mailov rabiš nek kompliciran sistem počasnega pošiljanja...
 		if($poslji_maile == 1) {
-			file_get_contents("https://bostjan.info/sklepnik/poslji-mail.php?u=".$login_key."&auth_key=".$dogodek_row->admin_pass_hash);
-			usleep(200); //100us + seveda ping time itd.
+			url_get_contents("https://bostjan.info/sklepnik/poslji-mail.php?u=".$login_key."&auth_key=".$dogodek_row->admin_pass_hash);
+			usleep(1000); //100us + seveda ping time itd.
 		}
 	}
 	
@@ -216,6 +216,21 @@ if($a == "dogodek-mail") {
 	$mail_html = mysqli_real_escape_string($mysqli, $_POST['mail_html']);
 	
 	mysqli_query($mysqli, "update sklepnik_dogodki set mail_zadeva = '$zadeva', mail_html = '$mail_html' where id = '$dogodek_id'");
+	
+	header("Location: admin.php");
+	die;
+}
+
+
+//zahtevaj reload vseh prisotnih
+if($a == "dogodek-reload") {
+	
+	//zapiši reload zahtevo in počakaj 15 sekund
+	file_put_contents("beacon-of-gondor.txt", "r");
+	sleep(15);
+	
+	//sprosti reload
+	file_put_contents("beacon-of-gondor.txt", "0");
 	
 	header("Location: admin.php");
 	die;

@@ -42,6 +42,23 @@ function posljiMail(id, key) {
 	});
 }
 
+function testniMail() {
+	var email = $('testni-email').value;
+	
+	$('test-email-info').innerHTML = '⏳';
+	$('test-mail-button').disabled = true;
+	
+	ajax.get('poslji-mail.php?a=testni-mail&email=' + encodeURIComponent(email), function(response) {
+		if(response == "ok") {
+			$('test-email-info').innerHTML = '✔️';
+		}
+		else {
+			alert("Napaka pri pošiljanju maila!");
+		}
+		$('test-mail-button').disabled = false;
+	});
+}
+
 function brisiDelegata(id, ime) {
 	
 	//pokaži katerega:
@@ -177,7 +194,15 @@ function saveData() {
 	$('data-input').value = data;
 	$('the-form').submit();
 }
-	
+
+
+//Gondor calls for aid
+function forceReload() {
+	var conf = confirm("Res osvežim?");
+	if(conf) {
+		location = 'shrani.php?a=dogodek-reload';
+	}
+}
 	
 
 //Preprečitev zapustitve strani:

@@ -97,7 +97,7 @@ if($ext == 'csv' || $ext == 'txt') {
 	}
 }
 else {
-	echo("Dovoljene so samo csv datoteke!");
+	echo("Dovoljene so samo .csv in .txt datoteke!");
 }
 ?>
 </div>
